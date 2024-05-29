@@ -5,7 +5,7 @@ import Industry from './industries.js';
 const jobSchema = new Schema({
     recruitersID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true
     },
     title: {
@@ -18,7 +18,7 @@ const jobSchema = new Schema({
     },
     industry: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Industry',
+        ref: 'Industries',
         required: true
     },
     numberOfApplicants: {
@@ -49,6 +49,7 @@ const jobSchema = new Schema({
     // Job Status: 1-Approve, 0-Reject, 2-Pending
     status: {
         type: Number,
+        default: 2,
         required: true
     },
     location: {

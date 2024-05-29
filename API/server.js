@@ -2,7 +2,7 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
-import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
+import { userRouter, jobRouter } from './router/index.js';
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
 // Kích hoạt middleware cho phép Express đọc json từ body của request
 app.use(express.json());
 app.use(cors(corsOptions));
+
+app.use('/user', userRouter);
+app.use('/job', jobRouter);
 
 const port = process.env.PORT || 3000;
 

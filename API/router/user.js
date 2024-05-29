@@ -6,6 +6,12 @@ const userRouter = express.Router();
 // Get list of users (applicants, recruiters)
 userRouter.get("/", userController.getAllUsers);
 
+// Get all recruiters
+userRouter.get('/recruiters', userController.getAllRecruiters);
+
+// Get invalidated recruiters
+userRouter.get('/invalidated-recruiters', userController.getInvalidatedRecruiters);
+
 // Get user detail
 userRouter.get("/:userId", userController.getUserDetails);
 
@@ -13,11 +19,7 @@ userRouter.get("/:userId", userController.getUserDetails);
 userRouter.patch("/:userId/deactive", userController.deactivateUser);
 userRouter.patch("/:userId/active", userController.activateUser);
 
-// Get all recruiter
-userRouter.get('/recruiters', userController.getAllRecruiters);
-
 // Validate Recruiter
-userRouter.get('/invalidated-recruiters', userController.getInvalidatedRecruiters);
 userRouter.patch('/recruiters/:userId/validate', userController.validateRecruiter);
 
 export default userRouter;

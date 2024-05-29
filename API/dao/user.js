@@ -1,4 +1,4 @@
-import User from "../models/users";
+import User from "../models/users.js";
 import createError from 'http-errors';
 
 const getAllUsers = async () => {
@@ -68,8 +68,8 @@ const validateRecruiter = async (userId) => {
     try {
         const recruiter = await User.findByIdAndUpdate(
             userId,
-            { roleID: 2, recruiterStatus: true },
-            { new: true }
+            { $set: { 'recruiterStatus': true } },
+            { new: true, strict: false }
         );
         if (!recruiter) {
             throw createError(404, 'User not found');
