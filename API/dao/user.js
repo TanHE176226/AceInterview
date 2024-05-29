@@ -66,6 +66,7 @@ const getAllInvalidatedRecruiters = async () => {
 
 const validateRecruiter = async (userId) => {
     try {
+        // Strict: false for updated unregistered field in schema
         const recruiter = await User.findByIdAndUpdate(
             userId,
             { $set: { 'recruiterStatus': true } },
