@@ -46,7 +46,7 @@ const jobSchema = new Schema({
     deadline: {
         type: Date
     },
-    // Job Status: Approve, Reject, Pending
+    // Job Status: 1-Approve, 0-Reject, 2-Pending
     status: {
         type: Number,
         required: true

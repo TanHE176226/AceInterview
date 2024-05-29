@@ -21,14 +21,17 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    // Role ID: 0 - admin, 1 - applicant, 2 - recruiter
     roleID: {
         type: Number,
         required: true
     },
     isActive: {
         type: Boolean,
+        default: true,
         required: true
     },
+    // Recruiter status will be boolean (true: validated, false: invalidated)
 }, {
     timestamps: true
 });
