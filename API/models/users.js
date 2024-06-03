@@ -17,7 +17,7 @@ const userSchema = new Schema({
         trim: true,
         required: true
     },
-    name: {
+    fullName: {
         type: String,
         required: true
     },
@@ -27,6 +27,7 @@ const userSchema = new Schema({
     },
     isActive: {
         type: Boolean,
+        default: true,
         required: true
     },
 }, {

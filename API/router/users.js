@@ -8,5 +8,6 @@ const userRouter = express.Router();
 
 // Đăng nhập người dùng
 userRouter.post('/login', userController.login);
+userRouter.post('/register', userController.register);
 
 export default userRouter;

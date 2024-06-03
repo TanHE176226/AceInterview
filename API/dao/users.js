@@ -1,32 +1,83 @@
 import User from "../models/users.js";
+import bcrypt from 'bcrypt';
+
 import createError from 'http-errors';
 
-// Create a new user
-const createUser = async (userData) => {
-    const user = new User(userData);
-    return user.save();
+const findUserByUsernameAndPassword = async (username, password) => {
+    try {
+        const user = await User.findOne({ username: username }).exec();
+
+        if (!user) {
+            return null;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.hash_password);
+        if (!isPasswordValid) {
+            return null;
+        }
+
+        return user;
+    } catch (error) {
+        console.error('Error in findUserByUsernameAndPassword:', error);
+        throw createError(500, 'Error finding user by username and password');
+    }
 };
 
-// Find a user by email
-const findUserByEmail = async (email) => {
+const findUserByEmailAndPassword = async (email, password) => {
     try {
-        return await User.findOne({ email });
+        const user = await User.findOne({ email: email }).exec();
+
+        if (!user) {
+            return null;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.hash_password);
+        if (!isPasswordValid) {
+            return null;
+        }
+
+        return user;
     } catch (error) {
-        throw new Error('Error finding user by email');
+        console.error('Error in findUserByEmailAndPassword:', error);
+        throw createError(500, 'Error finding user by email and password');
     }
 };
 
 // Find a user by username or email
 const findUserByUsernameOrEmail = async (usernameOrEmail) => {
     try {
-        return await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+        const user = await User.findOne({
+            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+        }).exec();
+
+        if (!user) {
+            return null;
+        }
+        return user;
     } catch (error) {
-        throw new Error('Error finding user by username or email');
+        console.error('Error in findUserByUsernameOrEmail:', error);
+        throw createError(500, 'Error finding user by username or email');
+    }
+};
+
+const createUser = async (userData) => {
+    try {
+        const user = new User(userData);
+        await user.save();
+        return user;
+    } catch (error) {
+        throw new Error('Error creating user: ' + error.message);
+    }
+};
+
+const findUserByEmail = async (email) => {
+    try {
+        return await User.findOne({ email });
+    } catch (error) {
+        throw new Error('Error finding user: ' + error.message);
     }
 };
 
 export default {
-    createUser,
-    findUserByEmail,
-    findUserByUsernameOrEmail
+    findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail
 };
