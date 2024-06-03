@@ -52,27 +52,38 @@ const login = async (req, res) => {
     const { identifier, password } = req.body;
 
     try {
-        let user = null;
-
-        // Try to find user by username and password
-        user = await userDAO.findUserByUsernameAndPassword(identifier, password);
-
-        // If not found, try to find user by email and password
-        if (!user) {
-            user = await userDAO.findUserByEmailAndPassword(identifier, password);
-        }
+        const user = await userDAO.findUserByUsernameOrEmail(identifier);
 
         if (!user) {
-            console.log('User not found for identifier:', identifier);
-            console.log('password', password);
-            return res.status(401).send('Unauthorized: User not found');
+            return res.status(404).json({
+                success: false,
+                message: 'User not found. Please check your username/email and try again.'
+            });
         }
 
-        const token = jwt.sign({ id: user._id }, 'secretKey', { expiresIn: '1h' });
-        res.status(200).json({ token });
+        const isMatch = await userDAO.comparePassword(user, password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Incorrect password. Please check your password and try again.'
+            });
+        }
+
+        // const token = jwt.sign({ id: user._id, roleID: user.roleID }, 'your_jwt_secret', { expiresIn: '1h' });
+
+        // return res.status(200).json({ success: true, token, user });
+        return res.status(200).json({ success: true, user });
+
+
     } catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).send('Internal Server Error');
+        console.error(error);
+        let errorMessage = 'An error occurred during login';
+        if (error.name === 'MongoError') {
+            errorMessage = 'Database error';
+        } else if (error.name === 'ValidationError') {
+            errorMessage = 'Validation error';
+        }
+        return res.status(500).json({ success: false, message: errorMessage, error: error.message });
     }
 };
 

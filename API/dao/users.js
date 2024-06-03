@@ -44,10 +44,10 @@ const findUserByEmailAndPassword = async (email, password) => {
 };
 
 // Find a user by username or email
-const findUserByUsernameOrEmail = async (usernameOrEmail) => {
+const findUserByUsernameOrEmail = async (identifier) => {
     try {
         const user = await User.findOne({
-            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+            $or: [{ username: identifier }, { email: identifier }],
         }).exec();
 
         if (!user) {
@@ -59,6 +59,10 @@ const findUserByUsernameOrEmail = async (usernameOrEmail) => {
         throw createError(500, 'Error finding user by username or email');
     }
 };
+
+const comparePassword = async (user, password) => {
+    return user.comparePassword(password);
+}
 
 const createUser = async (userData) => {
     try {
@@ -79,5 +83,5 @@ const findUserByEmail = async (email) => {
 };
 
 export default {
-    findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail
+    comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail
 };
