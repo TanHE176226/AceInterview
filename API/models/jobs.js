@@ -1,11 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
-import User from './users.js';
+import User from './users.js';;
 import Industry from './industries.js';
 
 const jobSchema = new Schema({
     recruitersID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true
     },
     title: {
@@ -18,7 +18,7 @@ const jobSchema = new Schema({
     },
     industry: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Industry',
+        ref: 'Industries',
         required: true
     },
     numberOfApplicants: {

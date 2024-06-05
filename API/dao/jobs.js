@@ -10,6 +10,14 @@ const getAllJob = async() =>{
     }
 }
 
+const getJobs = async(query) => {
+    try {
+        return await Job.find(query).populate('recruitersID').populate('industry');
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+}
+
 export default {
-    getAllJob
+    getAllJob, getJobs
 }

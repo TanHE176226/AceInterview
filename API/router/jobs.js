@@ -5,5 +5,6 @@ const jobRouter = express.Router();
 
 //get list companies 
 jobRouter.get("/", jobController.getAllJob);
+jobRouter.get('/find', jobController.getJobs );
 
 export default jobRouter;
