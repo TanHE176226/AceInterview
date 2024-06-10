@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 const userSchema = new Schema({
     username: {
         type: String,
+        unique: true,
         required: true
     },
     hash_password: {
@@ -19,21 +20,21 @@ const userSchema = new Schema({
     },
     phoneNumber: {
         type: String,
-        required: true
+        // required: true
     },
     fullName: {
         type: String,
-        required: true
+        // required: true
     },
     // Role ID: 0 - admin, 1 - applicant, 2 - recruiter
     roleID: {
         type: Number,
-        required: true
+        // required: true
     },
     isActive: {
         type: Boolean,
-        default: true,
-        required: true
+        default: false,
+        // required: true
     },
     // Recruiter status will be boolean (true: validated, false: invalidated)
 }, {

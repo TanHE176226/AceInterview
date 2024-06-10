@@ -1,4 +1,6 @@
 import { userDAO } from "../dao/index.js";
+import User from "../models/users.js";
+import jwt from "jsonwebtoken";
 
 const getAllUsers = async (req, res) => {
     try {

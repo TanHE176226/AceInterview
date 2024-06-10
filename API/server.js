@@ -2,7 +2,8 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
-import { userRouter, jobRouter } from './router/index.js';
+import { userRouter, jobRouter, authRouter } from './router/index.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -18,9 +19,11 @@ app.get('/', (req, res) => {
 // Kích hoạt middleware cho phép Express đọc json từ body của request
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use('/user', userRouter);
 app.use('/job', jobRouter);
+app.use(authRouter);
 
 const port = process.env.PORT || 3000;
 

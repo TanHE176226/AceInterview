@@ -1,10 +1,11 @@
 import express from "express";
-import { userController } from "..//controller/index.js";
+import { userController } from "../controller/index.js";
+import authJWT from "../middleware/authJWT.js";
 
 const userRouter = express.Router();
 
 // Get list of users (applicants, recruiters)
-userRouter.get("/", userController.getAllUsers);
+userRouter.get("/", authJWT.isAdmin, userController.getAllUsers);
 
 // Get all recruiters
 userRouter.get('/recruiters', userController.getAllRecruiters);
