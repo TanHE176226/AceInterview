@@ -99,7 +99,7 @@ const login = async (req, res) => {
         // Set the access token in the response header
         res.set('Authorization', 'Bearer ' + accessToken);
 
-        return res.status(200).json({ success: true, user, accessToken});
+        return res.status(200).json({ success: true, user, accessToken, refreshToken});
 
 
     } catch (error) {
@@ -114,6 +114,24 @@ const login = async (req, res) => {
     }
 };
 
+const deleteRefreshTokes = async (req, res) => {
+    console.log("returnn: ", refreshTokens)
+    refreshTokens = refreshTokens.filter(token => token != req.body.token);
+    res.status(204).json({success: true});
+}
+
+const getNewAccessTokens = async (req, res) => {
+    const refreshToken = req.body.token;
+    if (refreshToken == null) return res.status(401).json({success: false, message:"refesh token not found"});
+    // Make sure the refresh token is still valid
+    if (!refreshTokens.includes(refreshToken)) return res.status(403).json({success:false, message:"refesh token is invalid"});
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.status(403).json({success:false, message:"false token"});
+        const accessToken = generateAccessToken({ name: user.name });
+        res.json({ accessToken: accessToken });
+    })
+}
+
 export default {
-    login, register, getAllUsers
+    login, register, getAllUsers, deleteRefreshTokes, getNewAccessTokens
 };

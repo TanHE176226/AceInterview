@@ -1,11 +1,9 @@
 import express from 'express';
 import { userController } from "../controllers/index.js";
 import authJWT from '../middleware/authJWT.js';
+import refreshTokens from '../controllers/users.js';
 
 const userRouter = express.Router();
-
-// Đăng ký người dùng
-// authRouter.post('/register', authController.register);
 
 // Get list of users (applicants, recruiters)
 userRouter.get("/", authJWT.authenticationToken, authJWT.isRecruiter, userController.getAllUsers);
@@ -14,5 +12,9 @@ userRouter.get("/", authJWT.authenticationToken, authJWT.isRecruiter, userContro
 userRouter.post('/login', userController.login);
 
 userRouter.post('/register', userController.register);
+
+userRouter.delete("/logout", userController.deleteRefreshTokes);
+
+userRouter.post("/token", userController.getNewAccessTokens);
 
 export default userRouter;

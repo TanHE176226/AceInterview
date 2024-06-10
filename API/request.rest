@@ -1,2 +1,11 @@
-GET http://localhost:9999/auth
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjExMWZjOWM3ZmRiYTNlYzcwOGQwNSIsImlhdCI6MTcxODAzMDUyMiwiZXhwIjoxNzE4MDMxMTIyfQ.B9yAjmh-grzAg1WXNqKKjnEUqh-wNmx46LxE2blVpGU
+
+
+###
+POST http://localhost:9999/auth/login
+Content-Type: application/json
+{
+        "identifier": "Manh2003@gmail.com",
+        "password": "DoanSon2003"
+}
+###
+
