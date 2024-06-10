@@ -1,6 +1,20 @@
 import { userDAO } from "../dao/index.js";
 import bcrypt from 'bcrypt';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+// import from '../middleware/authJWT.js';
+
+let refreshTokens = [];
+
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userDAO.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({
+            error: error.toString()
+        });
+    }
+}
 
 const register = async (req, res) => {
     const { username, password, email, fullName, roleID } = req.body;
@@ -48,13 +62,20 @@ const register = async (req, res) => {
     }
 };
 
+function generateAccessToken(userID) {
+    return jwt.sign(userID, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+};
+
 const login = async (req, res) => {
     const { identifier, password } = req.body;
 
     try {
         const user = await userDAO.findUserByUsernameOrEmail(identifier);
 
+        console.log("return2: ", user )
+        
         if (!user) {
+            console.log("return3: ", identifier )
             return res.status(404).json({
                 success: false,
                 message: 'User not found. Please check your username/email and try again.'
@@ -68,11 +89,17 @@ const login = async (req, res) => {
                 message: 'Incorrect password. Please check your password and try again.'
             });
         }
+    
+        const userPayload = { id: user._id };
 
-        // const token = jwt.sign({ id: user._id, roleID: user.roleID }, 'your_jwt_secret', { expiresIn: '1h' });
+        const accessToken = generateAccessToken(userPayload);
+        const refreshToken = jwt.sign(userPayload, process.env.REFRESH_TOKEN_SECRET);
+        refreshTokens.push(refreshToken);
 
-        // return res.status(200).json({ success: true, token, user });
-        return res.status(200).json({ success: true, user });
+        // Set the access token in the response header
+        res.set('Authorization', 'Bearer ' + accessToken);
+
+        return res.status(200).json({ success: true, user, accessToken});
 
 
     } catch (error) {
@@ -88,5 +115,5 @@ const login = async (req, res) => {
 };
 
 export default {
-    login, register
+    login, register, getAllUsers
 };

@@ -29,7 +29,7 @@ const companySchema = new Schema({
     },
     recruiters: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Users'
     }],
     // Company Status: Bronze, Silver, Gold, Diamond
     companyStatus: {

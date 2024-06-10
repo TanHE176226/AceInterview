@@ -3,6 +3,15 @@ import bcrypt from 'bcrypt';
 
 import createError from 'http-errors';
 
+const getAllUsers = async () => {
+    try {
+        const users = await User.find({}).exec();
+        return users;
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+}
+
 const findUserByUsernameAndPassword = async (username, password) => {
     try {
         const user = await User.findOne({ username: username }).exec();
@@ -47,8 +56,11 @@ const findUserByEmailAndPassword = async (email, password) => {
 const findUserByUsernameOrEmail = async (identifier) => {
     try {
         const user = await User.findOne({
-            $or: [{ username: identifier }, { email: identifier }],
+            $or: [{ username: identifier }, { email: new RegExp('^' + identifier + '$', 'i') }],
         }).exec();
+
+        console.log("return: ", identifier )
+        console.log("return1: ", user )
 
         if (!user) {
             return null;
@@ -83,5 +95,5 @@ const findUserByEmail = async (email) => {
 };
 
 export default {
-    comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail
+    comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
 };
