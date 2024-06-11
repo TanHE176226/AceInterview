@@ -1,9 +1,8 @@
-import userRouter from "./user.js";
-import jobRouter from "./job.js";
-import authRouter from "./auth.js";
+import companiesRouter from "./companies.js";
+import jobRouter from "./jobs.js";
+import userRouter from "./users.js";
+import cvRouter from "./CVs.js";
 
 export {
-    userRouter,
-    jobRouter,
-    authRouter
+    companiesRouter, jobRouter, userRouter, cvRouter
 }

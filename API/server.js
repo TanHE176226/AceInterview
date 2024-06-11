@@ -2,7 +2,13 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
-import { userRouter, jobRouter, authRouter } from './router/index.js';
+import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
+
+//import router
+import { companiesRouter } from './router/index.js';
+import { jobRouter } from './router/index.js';
+import { userRouter } from './router/index.js';
+import { cvRouter } from './router/index.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -19,11 +25,15 @@ app.get('/', (req, res) => {
 // Kích hoạt middleware cho phép Express đọc json từ body của request
 app.use(express.json());
 app.use(cors(corsOptions));
+
+//define uri couter
+app.use('/companies', companiesRouter);
+app.use('/jobs', jobRouter);
+app.use('/auth', userRouter);
+app.use('/cv', cvRouter);
 app.use(cookieParser());
 
-app.use('/user', userRouter);
-app.use('/job', jobRouter);
-app.use(authRouter);
+//app.use('/user', userRouter);
 
 const port = process.env.PORT || 3000;
 

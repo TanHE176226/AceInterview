@@ -1,7 +1,8 @@
-import userDAO from "./user.js";
-import jobDAO from "./job.js";
+import companiesDAO from "./companies.js";
+import jobDAO from "./jobs.js";
+import userDAO from "./users.js";
+import cvDAO from "./CVs.js";
 
-export {
-    userDAO,
-    jobDAO
+export{
+    companiesDAO, jobDAO, userDAO, cvDAO
 }

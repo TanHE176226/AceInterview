@@ -1,10 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/users.js";
 
-function generateAccessToken(userID) {
-    return jwt.sign(userID, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
-};
-
 function isAdmin(req, res, next) {
     const user = req.user;
     if (user.roleID === 0) {
@@ -46,9 +42,8 @@ function authenticationToken(req, res, next) {
     });
 }
 
-
 export default {
-    requireAuth,
     isAdmin,
-    isRecruiter
+    isRecruiter,
+    authenticationToken
 }
