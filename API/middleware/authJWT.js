@@ -42,9 +42,8 @@ function authenticationToken(req, res, next) {
     });
 }
 
-
 export default {
-    authenticationToken,
     isAdmin,
-    isRecruiter
+    isRecruiter,
+    authenticationToken
 }

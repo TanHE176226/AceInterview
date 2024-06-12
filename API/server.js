@@ -2,14 +2,20 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
-import { userRouter, jobRouter, authRouter } from './router/index.js';
+import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
+
+//import router
+import { companiesRouter } from './router/index.js';
+import { jobRouter } from './router/index.js';
+import { userRouter } from './router/index.js';
+import { cvRouter } from './router/index.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
 // Định nghĩa 1 webserver
 const app = express();
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     optionsSuccessStatus: 200
 };
 app.get('/', (req, res) => {
@@ -21,9 +27,11 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use('/user', userRouter);
+//define uri couter
+app.use('/company', companiesRouter);
 app.use('/job', jobRouter);
-app.use(authRouter);
+app.use('/cv', cvRouter);
+app.use('/user', userRouter);
 
 const port = process.env.PORT || 3000;
 

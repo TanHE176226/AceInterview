@@ -1,4 +1,4 @@
-import Job from "../models/jobs.js";
+import Job from '../models/jobs.js';
 import createError from 'http-errors';
 
 const getAllJobs = async () => {
@@ -69,4 +69,4 @@ export default {
     getAllPendingJobs,
     approveJob,
     rejectJob,
-};
+}
