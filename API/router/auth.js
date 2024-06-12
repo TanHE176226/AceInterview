@@ -63,6 +63,8 @@ authRouter.post("/login", (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
     refreshTokens.push(refreshToken);
+    // Set the access token in the response header
+    res.set('Authorization', 'Bearer ' + accessToken);
     res.json({ accessToken: accessToken, refreshToken: refreshToken });
 });
 
