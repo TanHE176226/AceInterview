@@ -59,8 +59,8 @@ const findUserByUsernameOrEmail = async (identifier) => {
             $or: [{ username: identifier }, { email: new RegExp('^' + identifier + '$', 'i') }],
         }).exec();
 
-        console.log("return: ", identifier )
-        console.log("return1: ", user )
+        console.log("return: ", identifier)
+        console.log("return1: ", user)
 
         if (!user) {
             return null;
@@ -94,6 +94,89 @@ const findUserByEmail = async (email) => {
     }
 };
 
+const getUserById = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const deactivateUser = async (userId) => {
+    try {
+        const user = await User.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const activateUser = async (userId) => {
+    try {
+        const user = await User.findByIdAndUpdate(userId, { isActive: true }, { new: true });
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getAllRecruiters = async () => {
+    try {
+        const recruiters = await User.find({ roleID: 2 });
+        return recruiters;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getAllInvalidatedRecruiters = async () => {
+    try {
+        const invalidatedRecruiters = await User.find({ roleID: 2, recruiterStatus: false });
+        return invalidatedRecruiters;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const validateRecruiter = async (userId) => {
+    try {
+        // Strict: false for updated unregistered field in schema
+        const recruiter = await User.findByIdAndUpdate(
+            userId,
+            { $set: { 'recruiterStatus': true } },
+            { new: true, strict: false }
+        );
+        if (!recruiter) {
+            throw createError(404, 'User not found');
+        }
+        return recruiter;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
-    comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
+    comparePassword,
+    findUserByUsernameOrEmail,
+    findUserByUsernameAndPassword,
+    createUser,
+    findUserByEmailAndPassword,
+    findUserByEmail,
+    getAllUsers,
+    getUserById,
+    deactivateUser,
+    activateUser,
+    getAllRecruiters,
+    getAllInvalidatedRecruiters,
+    validateRecruiter
 };

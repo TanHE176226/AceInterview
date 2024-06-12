@@ -15,7 +15,7 @@ dotenv.config();
 // Định nghĩa 1 webserver
 const app = express();
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     optionsSuccessStatus: 200
 };
 app.get('/', (req, res) => {
@@ -25,15 +25,13 @@ app.get('/', (req, res) => {
 // Kích hoạt middleware cho phép Express đọc json từ body của request
 app.use(express.json());
 app.use(cors(corsOptions));
-
-//define uri couter
-app.use('/companies', companiesRouter);
-app.use('/jobs', jobRouter);
-app.use('/auth', userRouter);
-app.use('/cv', cvRouter);
 app.use(cookieParser());
 
-//app.use('/user', userRouter);
+//define uri couter
+app.use('/company', companiesRouter);
+app.use('/job', jobRouter);
+app.use('/cv', cvRouter);
+app.use('/user', userRouter);
 
 const port = process.env.PORT || 3000;
 

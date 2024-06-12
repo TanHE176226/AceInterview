@@ -1,9 +1,7 @@
 import { userDAO } from "../dao/index.js";
+import User from "../models/users.js";
+import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-// import from '../middleware/authJWT.js';
-
-let refreshTokens = [];
 
 const getAllUsers = async (req, res) => {
     try {
@@ -15,6 +13,66 @@ const getAllUsers = async (req, res) => {
         });
     }
 }
+
+const getUserDetails = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await userDAO.getUserById(userId);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const deactivateUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await userDAO.deactivateUser(userId);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const activateUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await userDAO.activateUser(userId);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const getAllRecruiters = async (req, res) => {
+    try {
+        const recruiters = await userDAO.getAllRecruiters();
+        res.status(200).json(recruiters);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const getInvalidatedRecruiters = async (req, res) => {
+    try {
+        const invalidatedRecruiters = await userDAO.getAllInvalidatedRecruiters();
+        res.status(200).json(invalidatedRecruiters);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const validateRecruiter = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const recruiter = await userDAO.validateRecruiter(userId);
+        res.status(200).json(recruiter);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+let refreshTokens = [];
 
 const register = async (req, res) => {
     const { username, password, email, fullName, roleID } = req.body;
@@ -72,10 +130,10 @@ const login = async (req, res) => {
     try {
         const user = await userDAO.findUserByUsernameOrEmail(identifier);
 
-        console.log("return2: ", user )
-        
+        console.log("return2: ", user)
+
         if (!user) {
-            console.log("return3: ", identifier )
+            console.log("return3: ", identifier)
             return res.status(404).json({
                 success: false,
                 message: 'User not found. Please check your username/email and try again.'
@@ -89,7 +147,7 @@ const login = async (req, res) => {
                 message: 'Incorrect password. Please check your password and try again.'
             });
         }
-    
+
         const userPayload = { id: user._id };
 
         const accessToken = generateAccessToken(userPayload);
@@ -99,7 +157,7 @@ const login = async (req, res) => {
         // Set the access token in the response header
         res.set('Authorization', 'Bearer ' + accessToken);
 
-        return res.status(200).json({ success: true, user, accessToken, refreshToken});
+        return res.status(200).json({ success: true, user, accessToken, refreshToken });
 
 
     } catch (error) {
@@ -117,21 +175,32 @@ const login = async (req, res) => {
 const deleteRefreshTokes = async (req, res) => {
     console.log("returnn: ", refreshTokens)
     refreshTokens = refreshTokens.filter(token => token != req.body.token);
-    res.status(204).json({success: true});
+    res.status(204).json({ success: true });
 }
 
 const getNewAccessTokens = async (req, res) => {
     const refreshToken = req.body.token;
-    if (refreshToken == null) return res.status(401).json({success: false, message:"refesh token not found"});
+    if (refreshToken == null) return res.status(401).json({ success: false, message: "refesh token not found" });
     // Make sure the refresh token is still valid
-    if (!refreshTokens.includes(refreshToken)) return res.status(403).json({success:false, message:"refesh token is invalid"});
+    if (!refreshTokens.includes(refreshToken)) return res.status(403).json({ success: false, message: "refesh token is invalid" });
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err) return res.status(403).json({success:false, message:"false token"});
+        if (err) return res.status(403).json({ success: false, message: "false token" });
         const accessToken = generateAccessToken({ name: user.name });
         res.json({ accessToken: accessToken });
     })
 }
 
 export default {
-    login, register, getAllUsers, deleteRefreshTokes, getNewAccessTokens
-};
+    getAllUsers,
+    getUserDetails,
+    deactivateUser,
+    activateUser,
+    getAllRecruiters,
+    getInvalidatedRecruiters,
+    validateRecruiter,
+    login,
+    register,
+    getAllUsers,
+    deleteRefreshTokes,
+    getNewAccessTokens
+}

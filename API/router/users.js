@@ -1,7 +1,6 @@
 import express from 'express';
-import { userController } from "../controllers/index.js";
+import { userController } from "../controller/index.js";
 import authJWT from '../middleware/authJWT.js';
-import refreshTokens from '../controllers/users.js';
 
 const userRouter = express.Router();
 
@@ -16,5 +15,18 @@ userRouter.post('/register', userController.register);
 userRouter.delete("/logout", userController.deleteRefreshTokes);
 
 userRouter.post("/token", userController.getNewAccessTokens);
+
+// Get all recruiters
+userRouter.get('/recruiters', userController.getAllRecruiters);
+
+// Get invalidated recruiters
+userRouter.get('/invalidated-recruiters', userController.getInvalidatedRecruiters);
+
+// Get user detail
+userRouter.get("/:userId", userController.getUserDetails);
+
+// Active/Deactive user
+userRouter.patch("/:userId/deactive", userController.deactivateUser);
+userRouter.patch("/:userId/active", userController.activateUser);
 
 export default userRouter;
