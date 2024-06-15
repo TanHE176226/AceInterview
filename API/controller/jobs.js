@@ -87,6 +87,7 @@ const rejectJob = async (req, res) => {
 
 export default {
     getAllJobs,
+    getJobs
     getJobDetails,
     getPendingJobs,
     approveJob,
