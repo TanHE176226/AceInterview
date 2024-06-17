@@ -3,12 +3,7 @@ import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
 import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
-
-//import router
-import { companiesRouter } from './router/index.js';
-import { jobRouter } from './router/index.js';
-import { userRouter } from './router/index.js';
-import { cvRouter } from './router/index.js';
+import { companiesRouter, jobRouter, userRouter, cvRouter } from './router/index.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
