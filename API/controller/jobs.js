@@ -31,12 +31,20 @@ const getJobs = async (req, res) => {
         if (location) {
             query.location = location;
         }
-        if (minSalary) {
-            query.salary = { ...query.salary, $gte: minSalary };
-        }
-        if (maxSalary) {
-            query.salary = { ...query.salary, $lte: maxSalary };
-        }
+        query.$or = [
+            {
+                $and: [
+                    { minSalary: { $gte: Number(minSalary) } },
+                    { minSalary: { $lte: Number(maxSalary) } }
+                ]
+            },
+            {
+                $and: [
+                    { minSalary: { $lte: Number(minSalary) } },
+                    { maxSalary: { $gte: Number(minSalary) } }
+                ]
+            }
+        ];
 
         const jobs = await jobDAO.getJobs(query);
         res.status(200).json(jobs);
