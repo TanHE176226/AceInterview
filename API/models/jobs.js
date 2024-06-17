@@ -61,7 +61,7 @@ const jobSchema = new Schema({
             district: {
                 type: String
             },
-            city: {
+            comune: {
                 type: String
             },
             province: {
