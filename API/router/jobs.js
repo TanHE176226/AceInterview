@@ -6,6 +6,9 @@ const jobRouter = express.Router();
 // Get all jobs
 jobRouter.get('/', jobController.getAllJobs);
 
+// Get all jobs with detail
+jobRouter.get('/find', jobController.getJobs);
+
 // Get all pending jobs
 jobRouter.get('/pending', jobController.getPendingJobs);
 

@@ -3,12 +3,20 @@ import createError from 'http-errors';
 
 const getAllJobs = async () => {
     try {
-        const jobs = await Job.find({}).populate('recruitersID').populate('industry');
+        const jobs = await Job.find({}).exec();
         return jobs;
     } catch (error) {
-        throw error;
+        throw createError(500, error.message);
     }
 };
+
+const getJobs = async (query) => {
+    try {
+        return await Job.find(query).populate('recruitersID').populate('industry');
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+}
 
 const getJobById = async (jobId) => {
     try {
@@ -65,6 +73,7 @@ const rejectJob = async (jobId) => {
 
 export default {
     getAllJobs,
+    getJobs,
     getJobById,
     getAllPendingJobs,
     approveJob,
