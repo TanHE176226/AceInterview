@@ -18,6 +18,18 @@ const getJobs = async(query) => {
     }
 }
 
+const getJobByID = async (jobId) => {
+    try {
+        const jobId = await Job.findById(jobId);
+        if(!jobId) {
+            throw createError(404, 'User not found');
+        }
+        return jobId;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export default {
-    getAllJob, getJobs
+    getAllJob, getJobs, getJobByID
 }

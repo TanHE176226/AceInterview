@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import User from './users.js';
+import User from './users.js';;
 import Industry from './industries.js';
 
 const jobSchema = new Schema({
@@ -46,10 +46,9 @@ const jobSchema = new Schema({
     deadline: {
         type: Date
     },
-    // Job Status: 1-Approve, 0-Reject, 2-Pending
+    // Job Status: Approve, Reject, Pending
     status: {
         type: Number,
-        default: 2,
         required: true
     },
     location: {

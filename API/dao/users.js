@@ -94,6 +94,18 @@ const findUserByEmail = async (email) => {
     }
 };
 
+const getUserById = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
-    comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
+    getUserById, comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
 };

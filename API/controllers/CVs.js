@@ -1,15 +1,24 @@
 import { cvDAO } from '../dao/index.js';
+import mongoose from 'mongoose';
+import path from 'path';
+import fs from 'fs';
 
 const uploadCV = async (req, res) => {
+    const { applicantId } = req.body;
+    const file = req.file;
+
+    if (!file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const fileURL = `/uploads/${file.filename}`;
+
     try {
-        const cvData = {
-            fileURL: req.body.fileURL,
-            applicantID: req.body.applicantID
-        };
-        const newCV = await cvDAO.createCV(cvData);
-        res.status(201).json(newCV);
+        const savedCV = await cvDAO.saveCV(fileURL, applicantId);
+        res.status(201).json(savedCV);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error uploading CV:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

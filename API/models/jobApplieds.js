@@ -15,7 +15,7 @@ const jobAppliedSchema = new Schema({
         ref: 'Users',
         required: true
     },
-    // Job Status: 1-Accept, 0-Reject, 2-Pending
+    // Job Status: Accept, Reject, Pending
     status: {
         type: Number,
         required: true

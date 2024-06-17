@@ -1,10 +1,12 @@
 import CV from '../models/CVs.js';
 
-const createCV = async (cvData) => {
+const saveCV = async (fileURL, applicantId) => {
+    const newCV = new CV({ fileURL, applicantID: applicantId });
     try {
-        const newCV = new CV(cvData);
-        return await newCV.save();
+        await newCV.save();
+        return newCV;
     } catch (error) {
+        console.error('Error saving CV:', error);
         throw error;
     }
 };
@@ -27,7 +29,7 @@ const getAllCVs = async () => {
 
 
 export default {
-    createCV,
+    saveCV,
     getCVById,
     getAllCVs
 };

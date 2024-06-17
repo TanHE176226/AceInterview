@@ -9,11 +9,7 @@ import { companiesRouter } from './router/index.js';
 import { jobRouter } from './router/index.js';
 import { userRouter } from './router/index.js';
 import { cvRouter } from './router/index.js';
-<<<<<<< HEAD
 import { jobAppliedRouter } from './router/index.js';
-=======
-import cookieParser from 'cookie-parser';
->>>>>>> 6cd253b17eb6d2a89978ac36f9f9a3053686415f
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -35,13 +31,9 @@ app.use('/companies', companiesRouter);
 app.use('/jobs', jobRouter);
 app.use('/auth', userRouter);
 app.use('/cv', cvRouter);
-<<<<<<< HEAD
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static('uploads'));
 app.use('/appliedjobs', jobAppliedRouter);
-=======
-app.use(cookieParser());
-
-//app.use('/user', userRouter);
->>>>>>> 6cd253b17eb6d2a89978ac36f9f9a3053686415f
 
 const port = process.env.PORT || 3000;
 

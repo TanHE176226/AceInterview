@@ -3,7 +3,7 @@ import User from './users.js';
 
 const cvSchema = new Schema({
     fileURL: {
-        type: String,
+        type: Buffer,
         required: true
     },
     applicantID: {
