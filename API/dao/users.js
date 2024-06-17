@@ -100,7 +100,7 @@ const comparePassword = async (user, password) => {
 const createUser = async (userData) => {
     try {
         console.log('Creating user with email:', userData.email);
-        const user = await User.create(userData, { strict: false });
+        const user = await User.create(userData);
         console.log('User created:', user);
         return user;
     } catch (error) {

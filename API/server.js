@@ -27,9 +27,9 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 //define uri couter
-app.use('/companies', companiesRouter);
-app.use('/jobs', jobRouter);
-app.use('/auth', userRouter);
+app.use('/company', companiesRouter);
+app.use('/job', jobRouter);
+app.use('/user', userRouter);
 app.use('/cv', cvRouter);
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static('uploads'));
