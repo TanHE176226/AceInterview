@@ -38,7 +38,8 @@ const userSchema = new Schema({
     },
     // Recruiter status will be boolean (true: validated, false: invalidated)
 }, {
-    timestamps: true
+    timestamps: true,
+    strict: false
 });
 
 userSchema.methods.comparePassword = function (password) {
