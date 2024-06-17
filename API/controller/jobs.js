@@ -29,7 +29,10 @@ const getJobs = async (req, res) => {
             query.status = status;
         }
         if (location) {
-            query.location = location;
+            query['location.comune'] = { $regex: location, $options: 'i' }; // Use $regex for case-insensitive search
+        }
+        if (experience) {
+            query.experience = experience;
         }
         query.$or = [
             {
