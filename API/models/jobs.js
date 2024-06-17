@@ -14,7 +14,7 @@ const jobSchema = new Schema({
     },
     desciprtion: {
         type: String,
-        required: true
+        required: false
     },
     industry: {
         type: mongoose.Schema.Types.ObjectId,

@@ -21,6 +21,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    // Role ID: 0 - admin, 1 - applicant, 2 - recruiter
     roleID: {
         type: Number,
         required: true
@@ -29,6 +30,19 @@ const userSchema = new Schema({
         type: Boolean,
         default: true,
         required: true
+    },
+    companiesID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Companies',
+        required: false
+    },
+    BusinessLicense: {
+        type: String,
+        required: false
+    },
+    Workplace: {
+        type: String,
+        required: false
     },
 }, {
     timestamps: true

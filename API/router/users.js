@@ -12,6 +12,7 @@ userRouter.get("/", authJWT.authenticationToken, authJWT.isRecruiter, userContro
 userRouter.post('/login', userController.login);
 
 userRouter.post('/register', userController.register);
+userRouter.post('/regis-recruiter', userController.registerRecruiter);
 
 userRouter.delete("/logout", userController.deleteRefreshTokes);
 

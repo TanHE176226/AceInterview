@@ -1,4 +1,5 @@
 import { jobDAO } from "../dao/index.js";
+import { userDAO } from "../dao/index.js";
 
 const getAllJob = async (req, res) => {
     try {
@@ -51,9 +52,21 @@ const getJobs = async (req, res) => {
 
 const applyForJob = async (userId, jobId) => {
     try {
+        // Check if the user exists
+        const user = await userDAO.getUserById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Check if the job exists
         const job = await jobDAO.getJobByID(jobId);
         if (!job) {
             throw new Error('Job not found');
+        }
+
+        // Ensure that job.applicants is initialized as an array
+        if (!job.applicants) {
+            job.applicants = [];
         }
 
         // Check if the user has already applied for this job
@@ -68,13 +81,14 @@ const applyForJob = async (userId, jobId) => {
         job.numberOfApplicants = job.applicants.length;
 
         // Save the updated job
-        await jobDAO.updateJob(jobId, { applicants: job.applicants, numberOfApplicants: job.numberOfApplicants });
-    
+        await job.save();
+
         return { success: true, message: 'Job application submitted successfully' };
     } catch (error) {
         return { success: false, error: error.message };
     }
 };
+
 
 
 export default { getAllJob, getJobs, applyForJob }

@@ -20,13 +20,13 @@ const getJobs = async(query) => {
 
 const getJobByID = async (jobId) => {
     try {
-        const jobId = await Job.findById(jobId);
-        if(!jobId) {
-            throw createError(404, 'User not found');
+        const job = await Job.findById(jobId);
+        if (!job) {
+            throw new Error('Job not found');
         }
-        return jobId;
+        return job;
     } catch (error) {
-        throw error;
+        throw error; // Re-throwing the error for centralized error handling
     }
 }
 
