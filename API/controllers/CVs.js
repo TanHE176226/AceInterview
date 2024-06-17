@@ -15,7 +15,7 @@ const uploadCV = async (req, res) => {
 
 const getCV = async (req, res) => {
     try {
-        const cv = await cvDAO.getCVById(req.params.id);
+        const cv = await cvDAO.getCVById(req.params.applicantID);
         if (!cv) {
             return res.status(404).json({ message: "CV not found" });
         }

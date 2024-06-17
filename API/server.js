@@ -9,6 +9,7 @@ import { companiesRouter } from './router/index.js';
 import { jobRouter } from './router/index.js';
 import { userRouter } from './router/index.js';
 import { cvRouter } from './router/index.js';
+import { jobAppliedRouter } from './router/index.js';
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -30,6 +31,7 @@ app.use('/companies', companiesRouter);
 app.use('/jobs', jobRouter);
 app.use('/auth', userRouter);
 app.use('/cv', cvRouter);
+app.use('/appliedjobs', jobAppliedRouter);
 
 const port = process.env.PORT || 3000;
 

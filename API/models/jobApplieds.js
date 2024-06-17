@@ -1,16 +1,18 @@
 import mongoose, { Schema } from "mongoose";
-import User from './users.js';
-import Job from './jobs.js';
+import Users from './users.js';
+import Jobs from './jobs.js';
 
 const jobAppliedSchema = new Schema({
     jobID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job',
+        // type: mongoose.Schema.Types.ObjectId,
+        type: String,
+        ref: 'Jobs',
         required: true
     },
     applicantID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        // type: mongoose.Schema.Types.ObjectId,
+        type: String,
+        ref: 'Users',
         required: true
     },
     // Job Status: Accept, Reject, Pending
