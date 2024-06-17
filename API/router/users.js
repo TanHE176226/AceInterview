@@ -1,7 +1,7 @@
 import express from 'express';
-import { userController } from "../controllers/index.js";
+import { userController } from "../controller/index.js";
 import authJWT from '../middleware/authJWT.js';
-import refreshTokens from '../controllers/users.js';
+import refreshTokens from '../controller/users.js';
 
 const userRouter = express.Router();
 

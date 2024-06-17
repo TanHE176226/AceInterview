@@ -59,8 +59,8 @@ const findUserByUsernameOrEmail = async (identifier) => {
             $or: [{ username: identifier }, { email: new RegExp('^' + identifier + '$', 'i') }],
         }).exec();
 
-        console.log("return: ", identifier )
-        console.log("return1: ", user )
+        console.log("return: ", identifier)
+        console.log("return1: ", user)
 
         if (!user) {
             return null;
@@ -76,15 +76,40 @@ const comparePassword = async (user, password) => {
     return user.comparePassword(password);
 }
 
+// const createUser = async (userData) => {
+//     try {
+//         console.log('retuen:', userData.email);
+//         const user = await User.create(
+//             {
+//                 username: userData.username,
+//                 hash_password: userData.hash_password,
+//                 email: userData.email,
+//                 fullName: userData.fullName,
+//                 roleID: userData.roleID,
+//                 isActive: userData.isActive,
+//                 companiesID: userData.companiesID,
+//                 BusinessLicense: userData.BusinessLicense,
+//                 Workplace: userData.Workplace
+//             }, {strict: false});
+//         return user;
+//     } catch (error) {
+//         throw new Error('Error creating user: ' + error.message);
+//     }
+// };
+
 const createUser = async (userData) => {
     try {
-        const user = new User(userData);
-        await user.save();
+        console.log('Creating user with email:', userData.email);
+        const user = await User.create(userData, { strict: false });
+        console.log('User created:', user);
         return user;
     } catch (error) {
+        console.error('Error creating user:', error);
         throw new Error('Error creating user: ' + error.message);
     }
 };
+
+
 
 const findUserByEmail = async (email) => {
     try {
@@ -107,5 +132,5 @@ const getUserById = async (userId) => {
 };
 
 export default {
-    getUserById, comparePassword,findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
+    getUserById, comparePassword, findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
 };
