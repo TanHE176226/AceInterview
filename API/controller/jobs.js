@@ -30,7 +30,7 @@ const getJobs = async (req, res) => {
             query.status = status;
         }
         if (location) {
-            query['location.city'] = { $regex: location, $options: 'i' }; // Use $regex for case-insensitive search
+            query['location.commune'] = { $regex: location, $options: 'i' }; // Use $regex for case-insensitive search
         }
         if (experience) {
             query.experience = experience;
@@ -50,45 +50,7 @@ const getJobs = async (req, res) => {
     }
 }
 
-const applyForJob = async (userId, jobId) => {
-    try {
-        // Check if the user exists
-        const user = await userDAO.getUserById(userId);
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        // Check if the job exists
-        const job = await jobDAO.getJobByID(jobId);
-        if (!job) {
-            throw new Error('Job not found');
-        }
-
-        // Ensure that job.applicants is initialized as an array
-        if (!job.applicants) {
-            job.applicants = [];
-        }
-
-        // Check if the user has already applied for this job
-        if (job.applicants.includes(userId)) {
-            throw new Error('You have already applied for this job');
-        }
-
-        // Add the user to the job's list of applicants
-        job.applicants.push(userId);
-
-        // Update the numberOfApplicants field
-        job.numberOfApplicants = job.applicants.length;
-
-        // Save the updated job
-        await job.save();
-
-        return { success: true, message: 'Job application submitted successfully' };
-    } catch (error) {
-        return { success: false, error: error.message };
-    }
-};
 
 
 
-export default { getAllJob, getJobs, applyForJob }
+export default { getAllJob, getJobs }

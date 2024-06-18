@@ -131,6 +131,45 @@ const getUserById = async (userId) => {
     }
 };
 
+const updateProfile = async (userId, profileData) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: profileData },
+            { new: true, runValidators: true }
+        );
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updatePassword = async (userId, newPassword) => {
+    try {
+        const saltRounds = 10;
+        const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { hash_password: hashedPassword } },
+            { new: true, runValidators: true }
+        );
+        
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
-    getUserById, comparePassword, findUserByUsernameOrEmail, findUserByUsernameAndPassword, createUser, findUserByEmailAndPassword, findUserByEmail, getAllUsers
+    getUserById,
+    comparePassword,
+    findUserByUsernameOrEmail,
+    findUserByUsernameAndPassword,
+    createUser,
+    findUserByEmailAndPassword,
+    findUserByEmail,
+    getAllUsers,
+    updateProfile,
+    updatePassword
 };
