@@ -18,4 +18,6 @@ userRouter.delete("/logout", userController.deleteRefreshTokes);
 
 userRouter.post("/token", userController.getNewAccessTokens);
 
+userRouter.put('/:id', userController.updateProfile);
+
 export default userRouter;
