@@ -167,6 +167,23 @@ const validateRecruiter = async (userId) => {
     }
 };
 
+const chooseCompany = async (userID, companyID) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userID,
+            {
+                $set: { 'companyID': companyID },
+            }
+        );
+        if (!updatedUser) {
+            throw createError(404, 'User not found');
+        }
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
     comparePassword,
     findUserByUsernameOrEmail,
@@ -180,5 +197,6 @@ export default {
     activateUser,
     getAllRecruiters,
     getAllInvalidatedRecruiters,
-    validateRecruiter
+    validateRecruiter,
+    chooseCompany
 };

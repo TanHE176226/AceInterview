@@ -237,6 +237,20 @@ const getNewAccessTokens = async (req, res) => {
     })
 }
 
+const chooseCompany = async (req, res, next) => {
+    try {
+        const { userID, companyID } = req.body;
+        const updatedUser = await userDAO.chooseCompany(userID, companyID);
+
+        res.status(200).json({
+            message: 'Updated successfully',
+            user: updatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     getAllUsers,
     getUserDetails,
@@ -250,5 +264,6 @@ export default {
     getAllUsers,
     deleteRefreshTokes,
     getNewAccessTokens,
-    registerRecruiter
+    registerRecruiter,
+    chooseCompany
 }
