@@ -5,5 +5,7 @@ const companiesRouter = express.Router();
 
 //get list companies 
 companiesRouter.get("/", companiesController.getAllCompanies);
+companiesRouter.get('/search', companiesController.searchCompanyByName);
+companiesRouter.get('/:id', companiesController.getCompanyDetailById);
 
 export default companiesRouter;

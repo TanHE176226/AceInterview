@@ -10,6 +10,24 @@ const getAllCompanies = async () => {
     }
 }
 
+const searchCompanyByName = async (name) => {
+    try {
+        const companies = await Companies.find({ companyName: new RegExp(name, 'i')});
+        return companies;
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+}
+
+const getCompanyDetailById = async (id) => {
+    try {
+        const company = await Companies.findById(id);
+        return company;
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+}
+
 export default {
-    getAllCompanies
+    getAllCompanies, searchCompanyByName, getCompanyDetailById
 }
