@@ -20,25 +20,30 @@ const userSchema = new Schema({
     },
     phoneNumber: {
         type: String,
-        // required: true
+        required: true
     },
     fullName: {
         type: String,
-        // required: true
+        required: true
     },
     // Role ID: 0 - admin, 1 - applicant, 2 - recruiter
     roleID: {
         type: Number,
-        // required: true
+        required: true
     },
     isActive: {
         type: Boolean,
         default: false,
-        // required: true
+        required: true
     },
+    companyID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Companies'
+    }
     // Recruiter status will be boolean (true: validated, false: invalidated)
 }, {
-    timestamps: true
+    timestamps: true,
+    strict: false
 });
 
 userSchema.methods.comparePassword = function (password) {

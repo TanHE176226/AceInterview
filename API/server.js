@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
 import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
-import { companiesRouter, jobRouter, userRouter, cvRouter } from './router/index.js';
+import { companiesRouter, jobRouter, userRouter, cvRouter, industryRouter } from './router/index.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -27,6 +27,7 @@ app.use('/company', companiesRouter);
 app.use('/job', jobRouter);
 app.use('/cv', cvRouter);
 app.use('/user', userRouter);
+app.use('/industry', industryRouter);
 
 const port = process.env.PORT || 3000;
 

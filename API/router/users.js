@@ -28,5 +28,7 @@ userRouter.get("/:userId", userController.getUserDetails);
 // Active/Deactive user
 userRouter.patch("/:userId/deactive", userController.deactivateUser);
 userRouter.patch("/:userId/active", userController.activateUser);
+userRouter.post('/regis-recruiter', userController.registerRecruiter);
+userRouter.patch('/:userId/choose-company', userController.chooseCompany);
 
 export default userRouter;

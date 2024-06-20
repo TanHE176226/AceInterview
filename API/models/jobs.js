@@ -37,7 +37,10 @@ const jobSchema = new Schema({
     level: {
         type: Number
     },
-    salary: {
+    minSalary: {
+        type: Number
+    },
+    maxSalary: {
         type: Number
     },
     experience: {
@@ -61,7 +64,7 @@ const jobSchema = new Schema({
             district: {
                 type: String
             },
-            city: {
+            comune: {
                 type: String
             },
             province: {

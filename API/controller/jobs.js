@@ -29,14 +29,25 @@ const getJobs = async (req, res) => {
             query.status = status;
         }
         if (location) {
-            query.location = location;
+            query['location.comune'] = { $regex: location, $options: 'i' }; // Use $regex for case-insensitive search
         }
-        if (minSalary) {
-            query.salary = { ...query.salary, $gte: minSalary };
+        if (experience) {
+            query.experience = experience;
         }
-        if (maxSalary) {
-            query.salary = { ...query.salary, $lte: maxSalary };
-        }
+        query.$or = [
+            {
+                $and: [
+                    { minSalary: { $gte: Number(minSalary) } },
+                    { minSalary: { $lte: Number(maxSalary) } }
+                ]
+            },
+            {
+                $and: [
+                    { minSalary: { $lte: Number(minSalary) } },
+                    { maxSalary: { $gte: Number(minSalary) } }
+                ]
+            }
+        ];
 
         const jobs = await jobDAO.getJobs(query);
         res.status(200).json(jobs);

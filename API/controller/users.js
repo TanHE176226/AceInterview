@@ -3,6 +3,53 @@ import User from "../models/users.js";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
 
+const registerRecruiter = async (req, res) => {
+    const { username, password, email, fullName, companiesID, BusinessLicense, Workplace } = req.body;
+
+    try {
+        // Kiểm tra xem email có tồn tại chưa
+        const existingUser = await userDAO.findUserByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email đã tồn tại' });
+        }
+
+        // Kiểm tra xem các trường dữ liệu có hợp lệ không
+        if (!username) {
+            return res.status(400).json({ message: 'Thiếu tên đăng nhập' });
+        }
+        if (!password) {
+            return res.status(400).json({ message: 'Thiếu mật khẩu' });
+        }
+        if (!email) {
+            return res.status(400).json({ message: 'Thiếu email' });
+        }
+        if (!fullName) {
+            return res.status(400).json({ message: 'Thiếu tên đầy đủ' });
+        }
+
+        // Hash password trước khi lưu
+        const salt = await bcrypt.genSalt(10);
+        const hash_password = await bcrypt.hash(password, salt);
+
+        // Tạo người dùng mới với hash_password
+        const newUser = await userDAO.createUser({
+            username,
+            hash_password,
+            email,
+            fullName,
+            roleID: 2,
+            companiesID,
+            BusinessLicense,
+            Workplace
+        });
+
+        return res.status(201).json({ message: 'Đăng ký thành công', user: newUser });
+    } catch (error) {
+        return res.status(500).json({ message: 'Đã xảy ra lỗi', error: error.message });
+    }
+};
+
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await userDAO.getAllUsers();
@@ -190,6 +237,20 @@ const getNewAccessTokens = async (req, res) => {
     })
 }
 
+const chooseCompany = async (req, res, next) => {
+    try {
+        const { userID, companyID } = req.body;
+        const updatedUser = await userDAO.chooseCompany(userID, companyID);
+
+        res.status(200).json({
+            message: 'Updated successfully',
+            user: updatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     getAllUsers,
     getUserDetails,
@@ -202,5 +263,7 @@ export default {
     register,
     getAllUsers,
     deleteRefreshTokes,
-    getNewAccessTokens
+    getNewAccessTokens,
+    registerRecruiter,
+    chooseCompany
 }

@@ -3,6 +3,18 @@ import bcrypt from 'bcrypt';
 
 import createError from 'http-errors';
 
+const createUser = async (userData) => {
+    try {
+        console.log('Creating user with email:', userData.email);
+        const user = await User.create(userData, { strict: false });
+        console.log('User created:', user);
+        return user;
+    } catch (error) {
+        console.error('Error creating user:', error);
+        throw new Error('Error creating user: ' + error.message);
+    }
+};
+
 const getAllUsers = async () => {
     try {
         const users = await User.find({}).exec();
@@ -75,16 +87,6 @@ const findUserByUsernameOrEmail = async (identifier) => {
 const comparePassword = async (user, password) => {
     return user.comparePassword(password);
 }
-
-const createUser = async (userData) => {
-    try {
-        const user = new User(userData);
-        await user.save();
-        return user;
-    } catch (error) {
-        throw new Error('Error creating user: ' + error.message);
-    }
-};
 
 const findUserByEmail = async (email) => {
     try {
@@ -165,6 +167,23 @@ const validateRecruiter = async (userId) => {
     }
 };
 
+const chooseCompany = async (userID, companyID) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userID,
+            {
+                $set: { 'companyID': companyID },
+            }
+        );
+        if (!updatedUser) {
+            throw createError(404, 'User not found');
+        }
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
     comparePassword,
     findUserByUsernameOrEmail,
@@ -178,5 +197,6 @@ export default {
     activateUser,
     getAllRecruiters,
     getAllInvalidatedRecruiters,
-    validateRecruiter
+    validateRecruiter,
+    chooseCompany
 };
