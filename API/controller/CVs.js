@@ -5,6 +5,8 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { storage } from '../config/firebaseConfig.js';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 // Lấy đường dẫn hiện tại
 const __filename = fileURLToPath(import.meta.url);
@@ -20,32 +22,21 @@ const uploadCV = async (req, res) => {
         let cvFile = req.files.cvFile;
         const applicantID = req.body.applicantID;
 
-        // Create a reference to the location where the file will be uploaded
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child(`uploads/${cvFile.name}`);
+        // Tạo một tham chiếu đến vị trí lưu trữ nơi file sẽ được tải lên
+        const fileRef = ref(storage, `uploads/${cvFile.name}`);
 
-        // const uploadPath = path.join(__dirname, '../uploads/', cvFile.name);
-
-        // // Save the file
-        // cvFile.mv(uploadPath, async (err) => {
-        //     if (err) {
-        //         return res.status(500).send(err);
-        //     }
-
-        // Upload file to Firebase Storage
-        const snapshot = await fileRef.put(cvFile.data, {
+        // Upload file lên Firebase Storage
+        const snapshot = await uploadBytes(fileRef, cvFile.data, {
             contentType: cvFile.mimetype
         });
 
-        // Get the download URL for the file
-        const fileURL = await snapshot.getDownloadURL();
+        // Lấy URL tải xuống cho file
+        const fileURL = await getDownloadURL(snapshot.ref);
 
-        // Save the file URL to the database
-        // const fileURL = `/uploads/${cvFile.name}`;
+        // Lưu URL của file vào cơ sở dữ liệu
         const cv = await cvDAO.createCV(fileURL, applicantID);
 
         res.status(201).json(cv);
-        // });
     } catch (error) {
         res.status(500).json({ message: 'Failed to upload CV', error: error.message });
     }
