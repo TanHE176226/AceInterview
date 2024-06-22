@@ -2,6 +2,9 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import connectDB from './database.js';
 import cors from 'cors';
+import path from 'path';
+import fileUpload from 'express-fileupload';
+
 import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
 
 //import router
@@ -10,6 +13,8 @@ import { jobRouter } from './router/index.js';
 import { userRouter } from './router/index.js';
 import { cvRouter } from './router/index.js';
 import { jobAppliedRouter } from './router/index.js';
+
+
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -26,13 +31,15 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(cors(corsOptions));
 
+app.use(fileUpload());
+app.use('/uploads', express.static('uploads'));
+
+
 //define uri couter
 app.use('/company', companiesRouter);
 app.use('/job', jobRouter);
 app.use('/user', userRouter);
 app.use('/cv', cvRouter);
-// Serve static files from the 'uploads' directory
-app.use('/uploads', express.static('uploads'));
 app.use('/appliedjobs', jobAppliedRouter);
 
 const port = process.env.PORT || 3000;

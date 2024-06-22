@@ -3,12 +3,12 @@ import User from './users.js';
 
 const cvSchema = new Schema({
     fileURL: {
-        type: Buffer,
+        type: String,
         required: true
     },
     applicantID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true
     }
 }, {
