@@ -21,7 +21,16 @@ const getCompanyById = async (companyId) => {
 
 const createCompany = async (companyData) => {
     try {
-        const newCompany = new Companies(companyData);
+        console.log('Received company data:', companyData); // Log received data for debugging
+        const newCompany = new Companies({
+            companyName: companyData.companyName,
+            email: companyData.email,
+            phoneNumber: companyData.phoneNumber,
+            location: companyData.location,
+            taxNumber: companyData.taxNumber,
+            numberOfEmployees: companyData.numberOfEmployees,
+            companyStatus: companyData.companyStatus
+        });
         await newCompany.save();
         return newCompany;
     } catch (error) {
@@ -31,7 +40,15 @@ const createCompany = async (companyData) => {
 
 const updateCompany = async (companyId, companyData) => {
     try {
-        const updatedCompany = await Companies.findByIdAndUpdate(companyId, companyData, { new: true }).exec();
+        const updatedCompany = await Companies.findByIdAndUpdate(companyId, {
+            companyName: companyData.companyName,
+            email: companyData.email,
+            phoneNumber: companyData.phoneNumber,
+            location: companyData.location,
+            taxNumber: companyData.taxNumber,
+            numberOfEmployees: companyData.numberOfEmployees,
+            companyStatus: companyData.companyStatus
+        }, { new: true }).exec();
         return updatedCompany;
     } catch (error) {
         throw createError(500, error.message);

@@ -31,6 +31,7 @@ const getJobs = async (req, res) => {
         if (location) {
             query['location.comune'] = { $regex: location, $options: 'i' }; // Use $regex for case-insensitive search
         }
+        
         if (experience) {
             query.experience = experience;
         }
@@ -70,6 +71,7 @@ const getJobDetails = async (req, res) => {
 const createJob = async (req, res) => {
     try {
         const jobData = req.body;
+        console.log(jobData)
         const job = await jobDAO.createJob(jobData);
         res.status(201).json(job);
     } catch (error) {

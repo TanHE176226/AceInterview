@@ -13,8 +13,21 @@ const jobSchema = new Schema({
         required: true
     },
     desciprtion: {
-        type: String,
-        required: true
+        type: Object,
+        default: {
+        JobDescription: {
+            type: String,
+            required: true
+        },
+        CandidateRequirements: {
+            type: String,
+            required: true
+        },
+        Benefit: {
+            type: String,
+            required: true
+        },
+    }
     },
     industry: {
         type: mongoose.Schema.Types.ObjectId,
@@ -73,7 +86,7 @@ const jobSchema = new Schema({
         }
     }
 }, {
-    timestamps: true
+    timestamps: true, strict: false,
 });
 
 const Job = mongoose.model("Jobs", jobSchema);

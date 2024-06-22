@@ -25,13 +25,43 @@ const getCompanyById = async (req, res) => {
 
 const createCompany = async (req, res) => {
     try {
-        const companyData = req.body;
+        // Destructure req.body to extract necessary fields
+        const {
+            companyName,
+            email,
+            phoneNumber,
+            location,
+            taxNumber,
+            numberOfEmployees,
+            companyStatus
+        } = req.body;
+
+        // Optionally log the received company data for debugging
+
+        // Create a new object containing extracted fields
+        const companyData = {
+            companyName,
+            email,
+            phoneNumber,
+            location,
+            taxNumber,
+            numberOfEmployees,
+            companyStatus
+        };
+        console.log('Received company data:', companyData);
+
+        // Call companiesDAO.createCompany to save the company
         const newCompany = await companiesDAO.createCompany(companyData);
+
+        // Respond with status 201 (Created) and the newly created company data
         res.status(201).json(newCompany);
     } catch (error) {
+        // If an error occurs, respond with status 500 (Internal Server Error)
+        // and send the error message as JSON
         res.status(500).json({ error: error.toString() });
     }
 };
+
 
 const updateCompany = async (req, res) => {
     try {

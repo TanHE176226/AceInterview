@@ -33,11 +33,11 @@ const companySchema = new Schema({
     }],
     // Company Status: Bronze, Silver, Gold, Diamond
     companyStatus: {
-        type: Number,
+        type: String,
         required: true
     }
 }, {
-    timestamps: true
+    timestamps: true, strict: false
 });
 
 const Company = mongoose.model("Companies", companySchema);
