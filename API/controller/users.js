@@ -96,7 +96,8 @@ const registerRecruiter = async (req, res) => {
             roleID: 2,
             companiesID,
             BusinessLicense,
-            Workplace
+            Workplace,
+            isActive: false
         });
 
         return res.status(201).json({ message: 'Đăng ký thành công', user: newUser });

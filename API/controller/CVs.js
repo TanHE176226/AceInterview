@@ -10,8 +10,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Lấy đường dẫn hiện tại
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 
 const uploadCV = async (req, res) => {
     try {

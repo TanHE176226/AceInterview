@@ -28,6 +28,27 @@ const getCompanyDetailById = async (id) => {
     }
 }
 
+const createCompany = async (companyData) => {
+    try {
+        console.log('Received company data:', companyData); // Log received data for debugging
+        const newCompany = new Companies({
+            companyName: companyData.companyName,
+            email: companyData.email,
+            phoneNumber: companyData.phoneNumber,
+            location: companyData.location,
+            taxNumber: companyData.taxNumber,
+            numberOfEmployees: companyData.numberOfEmployees,
+            companyStatus: companyData.companyStatus,
+            logo: companyData.logo,
+            businessLicense: companyData.businessLicense
+        });
+        await newCompany.save();
+        return newCompany;
+    } catch (error) {
+        throw createError(500, error.message);
+    }
+};
+
 export default {
-    getAllCompanies, searchCompanyByName, getCompanyDetailById
+    getAllCompanies, searchCompanyByName, getCompanyDetailById, createCompany
 }

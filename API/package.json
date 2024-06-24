@@ -21,6 +21,7 @@
         "express-fileupload": "^1.5.0",
         "express-session": "^1.18.0",
         "firebase": "^10.12.2",
+        "formidable": "^3.5.1",
         "http-errors": "^2.0.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.4.0",
@@ -30,7 +31,8 @@
         "passport-google-oauth20": "^2.0.0",
         "path": "^0.12.7",
         "save": "^2.9.0",
-        "url": "^0.11.3"
+        "url": "^0.11.3",
+        "uuid": "^10.0.0"
     },
     "devDependencies": {
         "nodemon": "^3.1.0"
