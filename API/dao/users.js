@@ -3,18 +3,6 @@ import bcrypt from 'bcrypt';
 
 import createError from 'http-errors';
 
-const createUser = async (userData) => {
-    try {
-        console.log('Creating user with email:', userData.email);
-        const user = await User.create(userData, { strict: false });
-        console.log('User created:', user);
-        return user;
-    } catch (error) {
-        console.error('Error creating user:', error);
-        throw new Error('Error creating user: ' + error.message);
-    }
-};
-
 const getAllUsers = async () => {
     try {
         const users = await User.find({}).exec();
@@ -88,11 +76,15 @@ const comparePassword = async (user, password) => {
     return user.comparePassword(password);
 }
 
-const findUserByEmail = async (email) => {
+const createUser = async (userData) => {
     try {
-        return await User.findOne({ email });
+        console.log('Creating user with email:', userData.email);
+        const user = await User.create(userData);
+        console.log('User created:', user);
+        return user;
     } catch (error) {
-        throw new Error('Error finding user: ' + error.message);
+        console.error('Error creating user:', error);
+        throw new Error('Error creating user: ' + error.message);
     }
 };
 
@@ -184,14 +176,45 @@ const chooseCompany = async (userID, companyID) => {
     }
 };
 
+const updateProfile = async (userId, profileData) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: profileData },
+            { new: true, runValidators: true }
+        );
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updatePassword = async (userId, newPassword) => {
+    try {
+        const saltRounds = 10;
+        const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { hash_password: hashedPassword } },
+            { new: true, runValidators: true }
+        );
+        
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
     comparePassword,
     findUserByUsernameOrEmail,
     findUserByUsernameAndPassword,
     createUser,
     findUserByEmailAndPassword,
-    findUserByEmail,
     getAllUsers,
+    updateProfile,
+    updatePassword
     getUserById,
     deactivateUser,
     activateUser,

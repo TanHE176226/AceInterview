@@ -11,11 +11,13 @@ userRouter.get("/", authJWT.authenticationToken, authJWT.isRecruiter, userContro
 userRouter.post('/login', userController.login);
 
 userRouter.post('/register', userController.register);
+userRouter.post('/regis-recruiter', userController.registerRecruiter);
 
 userRouter.delete("/logout", userController.deleteRefreshTokes);
 
 userRouter.post("/token", userController.getNewAccessTokens);
 
+userRouter.put('/:id', userController.updateProfile);
 // Get all recruiters
 userRouter.get('/recruiters', userController.getAllRecruiters);
 

@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 const userSchema = new Schema({
     username: {
         type: String,
-        unique: true,
         required: true
     },
     hash_password: {
@@ -33,7 +32,7 @@ const userSchema = new Schema({
     },
     isActive: {
         type: Boolean,
-        default: false,
+        default: true,
         required: true
     },
     companyID: {

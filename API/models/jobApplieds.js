@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import User from './users.js';
-import Job from './jobs.js';
+import Users from './users.js';
+import Jobs from './jobs.js';
 
 const jobAppliedSchema = new Schema({
     jobID: {
@@ -13,7 +13,7 @@ const jobAppliedSchema = new Schema({
         ref: 'Users',
         required: true
     },
-    // Job Status: 1-Accept, 0-Reject, 2-Pending
+    // Job Status: Accept, Reject, Pending
     status: {
         type: Number,
         required: true

@@ -3,11 +3,13 @@ import jobController from "./jobs.js";
 import companiesController from "./companies.js";
 import cvController from "./CVs.js";
 import industryController from "./industries.js";
+import jobAppliedController from "./jobApplieds.js";
 
 export {
     userController,
     jobController,
     companiesController,
     cvController,
-    industryController
+    industryController,
+    jobAppliedController
 }

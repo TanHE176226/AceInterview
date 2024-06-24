@@ -1,11 +1,23 @@
 import { userDAO } from "../dao/index.js";
-import User from "../models/users.js";
-import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+// import from '../middleware/authJWT.js';
 
-const registerRecruiter = async (req, res) => {
-    const { username, password, email, fullName, companiesID, BusinessLicense, Workplace } = req.body;
+let refreshTokens = [];
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userDAO.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({
+            error: error.toString()
+        });
+    }
+}
+
+const register = async (req, res) => {
+    const { username, password, email, fullName } = req.body;
     try {
         // Kiểm tra xem email có tồn tại chưa
         const existingUser = await userDAO.findUserByEmail(email);
@@ -37,10 +49,7 @@ const registerRecruiter = async (req, res) => {
             hash_password,
             email,
             fullName,
-            roleID: 2,
-            companiesID,
-            BusinessLicense,
-            Workplace
+            roleID: 1
         });
 
         return res.status(201).json({ message: 'Đăng ký thành công', user: newUser });
@@ -48,7 +57,6 @@ const registerRecruiter = async (req, res) => {
         return res.status(500).json({ message: 'Đã xảy ra lỗi', error: error.message });
     }
 };
-
 
 const getAllUsers = async (req, res) => {
     try {
@@ -121,9 +129,8 @@ const validateRecruiter = async (req, res) => {
 
 let refreshTokens = [];
 
-const register = async (req, res) => {
-    const { username, password, email, fullName, roleID } = req.body;
-
+const registerRecruiter = async (req, res) => {
+    const { username, password, email, fullName, companiesID, BusinessLicense, Workplace } = req.body;
     try {
         // Kiểm tra xem email có tồn tại chưa
         const existingUser = await userDAO.findUserByEmail(email);
@@ -144,9 +151,6 @@ const register = async (req, res) => {
         if (!fullName) {
             return res.status(400).json({ message: 'Thiếu tên đầy đủ' });
         }
-        if (roleID === undefined) {
-            return res.status(400).json({ message: 'Thiếu roleID' });
-        }
 
         // Hash password trước khi lưu
         const salt = await bcrypt.genSalt(10);
@@ -158,7 +162,11 @@ const register = async (req, res) => {
             hash_password,
             email,
             fullName,
-            roleID
+            roleID: 2,
+            companiesID,
+            BusinessLicense,
+            Workplace,
+            isActive: false
         });
 
         return res.status(201).json({ message: 'Đăng ký thành công', user: newUser });
@@ -237,6 +245,41 @@ const getNewAccessTokens = async (req, res) => {
     })
 }
 
+const updateProfile = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { profileData, newPassword } = req.body;
+
+        // Validate input (can be expanded as needed)
+        if (!profileData && !newPassword) {
+            return res.status(400).json({ message: 'Profile data or new password is required.' });
+        }
+
+        // Update profile if profileData is provided
+        let updatedUser = null;
+        if (profileData) {
+            updatedUser = await userDAO.updateProfile(userId, profileData);
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+        }
+
+        // Update password if newPassword is provided
+        if (newPassword) {
+            const saltRounds = 10;
+            const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
+            updatedUser = await userDAO.updatePassword(userId, hashedPassword);
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+        }
+
+        res.status(200).json({ message: 'Profile and/or password updated successfully', user: updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
 const chooseCompany = async (req, res, next) => {
     try {
         const { userID, companyID } = req.body;
@@ -261,9 +304,10 @@ export default {
     validateRecruiter,
     login,
     register,
-    getAllUsers,
-    deleteRefreshTokes,
-    getNewAccessTokens,
     registerRecruiter,
     chooseCompany
-}
+    updateProfile,
+    deleteRefreshTokes,
+    getNewAccessTokens,
+};
+

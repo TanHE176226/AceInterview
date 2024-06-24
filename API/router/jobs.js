@@ -1,9 +1,8 @@
-import express from "express";
-import { jobController } from "../controller/index.js";
+import express from 'express';
+import { jobController } from '../controller/index.js';
 
 const jobRouter = express.Router();
 
-// Get all jobs
 jobRouter.get('/', jobController.getAllJobs);
 
 // Get all jobs with detail

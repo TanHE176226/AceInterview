@@ -11,7 +11,7 @@ const getAllJobs = async (req, res) => {
 
 const getJobs = async (req, res) => {
     try {
-        const { title, industry, typeOfWork, status, location, minSalary, maxSalary } = req.query;
+        const { title, industry, typeOfWork, status, location, minSalary, maxSalary, experience } = req.query;
 
         const query = {};
 
@@ -48,7 +48,6 @@ const getJobs = async (req, res) => {
                 ]
             }
         ];
-
         const jobs = await jobDAO.getJobs(query);
         res.status(200).json(jobs);
 
