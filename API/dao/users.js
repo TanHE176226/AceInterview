@@ -199,7 +199,7 @@ const updatePassword = async (userId, newPassword) => {
             { $set: { hash_password: hashedPassword } },
             { new: true, runValidators: true }
         );
-        
+
         return updatedUser;
     } catch (error) {
         throw error;
@@ -214,7 +214,7 @@ export default {
     findUserByEmailAndPassword,
     getAllUsers,
     updateProfile,
-    updatePassword
+    updatePassword,
     getUserById,
     deactivateUser,
     activateUser,

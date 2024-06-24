@@ -58,17 +58,6 @@ const register = async (req, res) => {
     }
 };
 
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await userDAO.getAllUsers();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({
-            error: error.toString()
-        });
-    }
-}
-
 const getUserDetails = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -126,8 +115,6 @@ const validateRecruiter = async (req, res) => {
         res.status(error.status || 500).json({ message: error.message });
     }
 };
-
-let refreshTokens = [];
 
 const registerRecruiter = async (req, res) => {
     const { username, password, email, fullName, companiesID, BusinessLicense, Workplace } = req.body;
@@ -305,7 +292,7 @@ export default {
     login,
     register,
     registerRecruiter,
-    chooseCompany
+    chooseCompany,
     updateProfile,
     deleteRefreshTokes,
     getNewAccessTokens,
