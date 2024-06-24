@@ -97,7 +97,7 @@ const rejectJob = async (req, res) => {
 
 const getJobsByRecruiterID = async (req, res) => {
     try {
-        const { recruiterID } = req.query;
+        const { recruiterID } = req.params;
         const jobs = await jobDAO.getJobByRecruiterID(recruiterID);
         res.status(200).json(jobs);
     } catch (error) {

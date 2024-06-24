@@ -73,7 +73,8 @@ const rejectJob = async (jobId) => {
 
 const getJobByRecruiterID = async (recruiterID) => {
     try {
-        const query = { recruitersID: recruiterID };
+        console.log(recruiterID);
+        const query = { "recruitersID": recruiterID };
         const jobs = await Job.find(query).populate('recruitersID').populate('industry');
         return jobs;
     } catch (error) {
