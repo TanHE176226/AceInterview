@@ -76,27 +76,6 @@ const comparePassword = async (user, password) => {
     return user.comparePassword(password);
 }
 
-// const createUser = async (userData) => {
-//     try {
-//         console.log('retuen:', userData.email);
-//         const user = await User.create(
-//             {
-//                 username: userData.username,
-//                 hash_password: userData.hash_password,
-//                 email: userData.email,
-//                 fullName: userData.fullName,
-//                 roleID: userData.roleID,
-//                 isActive: userData.isActive,
-//                 companiesID: userData.companiesID,
-//                 BusinessLicense: userData.BusinessLicense,
-//                 Workplace: userData.Workplace
-//             }, {strict: false});
-//         return user;
-//     } catch (error) {
-//         throw new Error('Error creating user: ' + error.message);
-//     }
-// };
-
 const createUser = async (userData) => {
     try {
         console.log('Creating user with email:', userData.email);
@@ -109,16 +88,6 @@ const createUser = async (userData) => {
     }
 };
 
-
-
-const findUserByEmail = async (email) => {
-    try {
-        return await User.findOne({ email });
-    } catch (error) {
-        throw new Error('Error finding user: ' + error.message);
-    }
-};
-
 const getUserById = async (userId) => {
     try {
         const user = await User.findById(userId);
@@ -126,6 +95,82 @@ const getUserById = async (userId) => {
             throw createError(404, 'User not found');
         }
         return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const deactivateUser = async (userId) => {
+    try {
+        const user = await User.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const activateUser = async (userId) => {
+    try {
+        const user = await User.findByIdAndUpdate(userId, { isActive: true }, { new: true });
+        if (!user) {
+            throw createError(404, 'User not found');
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getAllRecruiters = async () => {
+    try {
+        const recruiters = await User.find({ roleID: 2 });
+        return recruiters;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getAllInvalidatedRecruiters = async () => {
+    try {
+        const invalidatedRecruiters = await User.find({ roleID: 2, recruiterStatus: false });
+        return invalidatedRecruiters;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const validateRecruiter = async (userId) => {
+    try {
+        // Strict: false for updated unregistered field in schema
+        const recruiter = await User.findByIdAndUpdate(
+            userId,
+            { $set: { 'recruiterStatus': true } },
+            { new: true, strict: false }
+        );
+        if (!recruiter) {
+            throw createError(404, 'User not found');
+        }
+        return recruiter;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const chooseCompany = async (userID, companyID) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userID,
+            {
+                $set: { 'companyID': companyID },
+            }
+        );
+        if (!updatedUser) {
+            throw createError(404, 'User not found');
+        }
+        return updatedUser;
     } catch (error) {
         throw error;
     }
@@ -162,14 +207,19 @@ const updatePassword = async (userId, newPassword) => {
 };
 
 export default {
-    getUserById,
     comparePassword,
     findUserByUsernameOrEmail,
     findUserByUsernameAndPassword,
     createUser,
     findUserByEmailAndPassword,
-    findUserByEmail,
     getAllUsers,
     updateProfile,
     updatePassword
+    getUserById,
+    deactivateUser,
+    activateUser,
+    getAllRecruiters,
+    getAllInvalidatedRecruiters,
+    validateRecruiter,
+    chooseCompany
 };

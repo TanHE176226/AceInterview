@@ -1,16 +1,16 @@
 import Job from '../models/jobs.js';
 import createError from 'http-errors';
 
-const getAllJob = async() =>{
+const getAllJobs = async () => {
     try {
         const jobs = await Job.find({}).exec();
         return jobs;
     } catch (error) {
         throw createError(500, error.message);
     }
-}
+};
 
-const getJobs = async(query) => {
+const getJobs = async (query) => {
     try {
         return await Job.find(query).populate('recruitersID').populate('industry');
     } catch (error) {
@@ -18,18 +18,64 @@ const getJobs = async(query) => {
     }
 }
 
-const getJobByID = async (jobId) => {
+const getJobById = async (jobId) => {
     try {
-        const job = await Job.findById(jobId);
+        const job = await Job.findById(jobId).populate('recruitersID').populate('industry');
         if (!job) {
-            throw new Error('Job not found');
+            throw createError(404, 'Job not found');
         }
         return job;
     } catch (error) {
-        throw error; // Re-throwing the error for centralized error handling
+        throw error;
     }
-}
+};
+
+const getAllPendingJobs = async () => {
+    try {
+        const pendingJobs = await Job.find({ status: 2 }).populate('recruitersID').populate('industry');
+        return pendingJobs;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const approveJob = async (jobId) => {
+    try {
+        const job = await Job.findByIdAndUpdate(
+            jobId,
+            { status: 1 },
+            { new: true }
+        );
+        if (!job) {
+            throw createError(404, 'Job not found');
+        }
+        return job;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const rejectJob = async (jobId) => {
+    try {
+        const job = await Job.findByIdAndUpdate(
+            jobId,
+            { status: 0 },
+            { new: true }
+        );
+        if (!job) {
+            throw createError(404, 'Job not found');
+        }
+        return job;
+    } catch (error) {
+        throw error;
+    }
+};
 
 export default {
-    getAllJob, getJobs, getJobByID
+    getAllJobs,
+    getJobs,
+    getJobById,
+    getAllPendingJobs,
+    approveJob,
+    rejectJob,
 }

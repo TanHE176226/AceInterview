@@ -3,20 +3,21 @@ import { jobController } from '../controller/index.js';
 
 const jobRouter = express.Router();
 
-//get list companies 
-jobRouter.get("/", jobController.getAllJob);
+jobRouter.get('/', jobController.getAllJobs);
+
+// Get all jobs with detail
 jobRouter.get('/find', jobController.getJobs);
 
-jobRouter.post('/apply/:jobId', async (req, res) => {
-    const userId = req.body.userId; // Assuming userId is provided in the request body
-    const jobId = req.params.jobId;
+// Get all pending jobs
+jobRouter.get('/pending', jobController.getPendingJobs);
 
-    try {
-        const result = await jobController.applyForJob(userId, jobId);
-        res.json(result);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
+// Get job details
+jobRouter.get('/:jobId', jobController.getJobDetails);
+
+// Approve Jobs
+jobRouter.patch('/:jobId/approve', jobController.approveJob);
+
+// Reject Jobs
+jobRouter.patch('/:jobId/reject', jobController.rejectJob);
 
 export default jobRouter;

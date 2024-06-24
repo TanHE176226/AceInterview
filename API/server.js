@@ -8,20 +8,14 @@ import { fileURLToPath } from 'url';
 
 
 import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
-
-//import router
-import { companiesRouter } from './router/index.js';
-import { jobRouter } from './router/index.js';
-import { userRouter } from './router/index.js';
-import { cvRouter } from './router/index.js';
-import { jobAppliedRouter } from './router/index.js';
-
+import { companiesRouter, jobRouter, userRouter, cvRouter, industryRouter, jobAppliedRouter } from './router/index.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 // Định nghĩa 1 webserver
 const app = express();
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     optionsSuccessStatus: 200
 };
 
@@ -35,6 +29,7 @@ app.get('/', (req, res) => {
 // Kích hoạt middleware cho phép Express đọc json từ body của request
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use(fileUpload({
     createParentPath: true
@@ -45,8 +40,9 @@ app.use(fileUpload({
 //define uri couter
 app.use('/company', companiesRouter);
 app.use('/job', jobRouter);
-app.use('/user', userRouter);
 app.use('/cv', cvRouter);
+app.use('/user', userRouter);
+app.use('/industry', industryRouter);
 app.use('/appliedjobs', jobAppliedRouter);
 
 const port = process.env.PORT || 3000;

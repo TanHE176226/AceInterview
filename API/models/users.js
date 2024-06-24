@@ -17,6 +17,10 @@ const userSchema = new Schema({
         trim: true,
         required: true
     },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
     fullName: {
         type: String,
         required: true
@@ -31,7 +35,11 @@ const userSchema = new Schema({
         default: true,
         required: true
     },
-
+    companyID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Companies'
+    }
+    // Recruiter status will be boolean (true: validated, false: invalidated)
 }, {
     timestamps: true,
     strict: false
