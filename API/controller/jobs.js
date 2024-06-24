@@ -95,6 +95,16 @@ const rejectJob = async (req, res) => {
     }
 };
 
+const getJobsByRecruiterID = async (req, res) => {
+    try {
+        const { recruiterID } = req.query;
+        const jobs = await jobDAO.getJobByRecruiterID(recruiterID);
+        res.status(200).json(jobs);
+    } catch (error) {
+        res.status(500).json({ error: error.toString() });
+    }
+};
+
 export default {
     getAllJobs,
     getJobs,
@@ -102,4 +112,5 @@ export default {
     getPendingJobs,
     approveJob,
     rejectJob,
+    getJobsByRecruiterID
 };

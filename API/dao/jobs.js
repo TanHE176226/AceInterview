@@ -71,6 +71,16 @@ const rejectJob = async (jobId) => {
     }
 };
 
+const getJobByRecruiterID = async (recruiterID) => {
+    try {
+        const query = { recruitersID: recruiterID };
+        const jobs = await Job.find(query).populate('recruitersID').populate('industry');
+        return jobs;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 export default {
     getAllJobs,
     getJobs,
@@ -78,4 +88,5 @@ export default {
     getAllPendingJobs,
     approveJob,
     rejectJob,
+    getJobByRecruiterID
 }
