@@ -47,6 +47,29 @@ const applyForJob = async (req, res) => {
     }
 }
 
+const acceptCV = async (req, res) => {
+    try {
+        const { jobID, applicantID } = req.body;
+        const newStatus = await jobAppliedDAO.acceptCV(jobID, applicantID);
+        res.status(200).json(newStatus);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
+const rejectCV = async (req, res) => {
+    try {
+        const { jobID, applicantID } = req.body;
+        const newStatus = await jobAppliedDAO.rejectCV(jobID, applicantID);
+        res.status(200).json(newStatus);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message });
+    }
+};
+
 export default {
-    getAppliedJobs, applyForJob
+    getAppliedJobs,
+    applyForJob,
+    acceptCV,
+    rejectCV
 };

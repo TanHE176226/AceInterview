@@ -36,6 +36,53 @@ const appliedForJob = async (jobId, applicantId) => {
     }
 };
 
+const acceptCV = async (jobID, applicantID) => {
+    try {
+        if (!jobID || !applicantID) {
+            throw new Error('jobID and applicantID are required.');
+        }
+
+        const result = await JobApplied.findOneAndUpdate(
+            { jobID: jobID, applicantID: applicantID },
+            { $set: { status: 1 } },
+            { new: true }
+        );
+
+        if (!result) {
+            throw new Error('No matching document found.');
+        }
+
+        return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const rejectCV = async (jobID, applicantID) => {
+    try {
+        if (!jobID || !applicantID) {
+            throw new Error('jobID and applicantID are required.');
+        }
+
+        const result = await JobApplied.findOneAndUpdate(
+            { jobID: jobID, applicantID: applicantID },
+            { $set: { status: 0 } },
+            { new: true }
+        );
+
+        if (!result) {
+            throw new Error('No matching document found.');
+        }
+
+        return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
-    getAppliedJobsByApplicantId, appliedForJob
+    getAppliedJobsByApplicantId,
+    appliedForJob,
+    acceptCV,
+    rejectCV
 };
