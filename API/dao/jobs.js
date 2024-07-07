@@ -1,10 +1,9 @@
 import Job from '../models/jobs.js';
-import mongoose from 'mongoose';
 import createError from 'http-errors';
 
 const getAllJobs = async () => {
     try {
-        const jobs = await Job.find({}).sort({ createdAt: -1 }).exec();
+        const jobs = await Job.find({}).exec();
         return jobs;
     } catch (error) {
         throw createError(500, error.message);
@@ -20,10 +19,8 @@ const getJobs = async (query) => {
 }
 
 const getJobById = async (jobId) => {
-    console.log("return: ", jobId);
     try {
         const job = await Job.findById(jobId).populate('recruitersID').populate('industry');
-        console.log("return: ", job);
         if (!job) {
             throw createError(404, 'Job not found');
         }
@@ -31,7 +28,7 @@ const getJobById = async (jobId) => {
     } catch (error) {
         throw error;
     }
-}
+};
 
 const getAllPendingJobs = async () => {
     try {
@@ -74,73 +71,11 @@ const rejectJob = async (jobId) => {
     }
 };
 
-const getJobByRecruiterID = async (recruiterID) => {
-    try {
-        const jobs = await Job.find({ recruitersID: recruiterID })
-            .populate('recruitersID', 'name') // Customize as needed
-            .populate('industry', 'name'); // Customize as needed
-
-        return jobs;
-    } catch (error) {
-        throw new Error(error);
-    }
-};
-
-const createJob = async (jobData) => {
-    try {
-        const job = new Job(jobData);
-        await job.save();
-        return job;
-    } catch (error) {
-        throw createError(500, error.message);
-    }
-};
-
-const updateJob = async (jobId, jobData) => {
-    try {
-        const job = await Job.findByIdAndUpdate(jobId, jobData, { new: true }).populate('recruitersID').populate('industry');
-        if (!job) {
-            throw createError(404, 'Job not found');
-        }
-        return job;
-    } catch (error) {
-        throw error;
-    }
-};
-
-const deleteJob = async (jobId) => {
-    try {
-        const job = await Job.findByIdAndDelete(jobId);
-        if (!job) {
-            throw createError(404, 'Job not found');
-        }
-        return job;
-    } catch (error) {
-        throw error;
-    }
-};
-
-const getRecruiterIdByJobId = async (jobId) => {
-    try {
-        const job = await Job.findById(jobId);
-        if (!job) {
-            throw createError(404, 'Job not found');
-        }
-        return job.recruitersID;
-    } catch (error) {
-        throw error;
-    }
-
-}
-
 export default {
-    getAllJobs, getRecruiterIdByJobId,
+    getAllJobs,
     getJobs,
     getJobById,
     getAllPendingJobs,
     approveJob,
-    createJob,
-    updateJob,
-    deleteJob,
-    rejectJob, getJobByRecruiterID
+    rejectJob,
 }
