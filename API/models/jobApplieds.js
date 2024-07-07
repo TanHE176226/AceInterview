@@ -5,14 +5,17 @@ import Jobs from './jobs.js';
 const jobAppliedSchema = new Schema({
     jobID: {
         type: mongoose.Schema.Types.ObjectId,
-        // type: String,
         ref: 'Jobs',
         required: true
     },
     applicantID: {
         type: mongoose.Schema.Types.ObjectId,
-        // type: String,
         ref: 'Users',
+        required: true
+    },
+    cvsID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'CVs',
         required: true
     },
     // Job Status: Accept, Reject, Pending

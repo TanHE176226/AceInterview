@@ -1,76 +1,96 @@
-import mongoose, { Schema } from 'mongoose';
-import User from './users.js';;
-import Industry from './industries.js';
+import mongoose, { Schema } from "mongoose";
+import User from "./users.js";
+import Industry from "./industries.js";
 
-const jobSchema = new Schema({
+const jobSchema = new Schema(
+  {
     recruitersID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
+      type: String,
+      ref: "Users",
+      // required: true,
     },
     title: {
-        type: String,
-        required: true
+      type: String,
+      // required: true,
     },
-    desciprtion: {
-        type: String,
-        required: false
+    description: {
+        type: Object,
+        default: {
+        JobDescription: {
+            type: String,
+            // required: true
+        },
+        CandidateRequirements: {
+            type: String,
+            // required: true
+        },
+        Benefit: {
+            type: String,
+            // required: true
+        },
+    }
     },
     industry: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Industries',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Industries",
+      // required: true,
     },
     numberOfApplicants: {
-        type: Number,
-        required: true
+      type: Number,
+      // required: true,
     },
     // 2 Type of Work: 0-FullTime, 1-PartTime
     typeOfWork: {
-        type: Boolean,
-        required: true
+      type: Boolean,
+      // required: true,
     },
     // Gender is blank means gender is not required
     gender: {
-        type: Boolean
+      type: Boolean,
     },
     level: {
-        type: Number
+      type: Number,
     },
-    salary: {
-        type: Number
+    minSalary: {
+      type: Number,
+    },
+    maxSalary: {
+      type: Number,
     },
     experience: {
-        type: Number
+      type: Number,
     },
     deadline: {
-        type: Date
+      type: Date,
     },
-    // Job Status: Approve, Reject, Pending
+    // Job Status: 1-Approve, 0-Reject, 2-Pending
     status: {
-        type: Number,
-        required: true
+      type: Number,
+      default: 2,
+      // required: true,
     },
     location: {
-        type: Object,
-        default: {
-            address: {
-                type: String
-            },
-            district: {
-                type: String
-            },
-            city: {
-                type: String
-            },
-            province: {
-                type: String
-            }
-        }
-    }
-}, {
-    timestamps: true
-});
+      type: Object,
+      default: {
+        address: {
+          type: String,
+        },
+        district: {
+          type: String,
+        },
+        comune: {
+          type: String,
+        },
+        province: {
+          type: String,
+        },
+      },
+    },
+  },
+  {
+    timestamps: true,strict: true,
+  }
+);
 
 const Job = mongoose.model("Jobs", jobSchema);
 export default Job;

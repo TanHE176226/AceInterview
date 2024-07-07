@@ -17,6 +17,10 @@ const userSchema = new Schema({
         trim: true,
         required: true
     },
+    phoneNumber: {
+        type: String,
+        // required: true
+    },
     fullName: {
         type: String,
         required: true
@@ -29,9 +33,19 @@ const userSchema = new Schema({
     isActive: {
         type: Boolean,
         default: true,
-        required: true
+        // required: true
     },
-
+    companyID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Companies'
+    },
+    // Recruiter status will be boolean (true: validated, false: invalidated)
+    refreshToken: {
+        type: String,
+    },
+    refreshTokenExpiresAt: {
+        type: Date,
+    }
 }, {
     timestamps: true,
     strict: false

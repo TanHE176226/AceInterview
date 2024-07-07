@@ -1,6 +1,84 @@
 
 
 ###
+POST http://localhost:9999/user/sendmailJob
+Content-Type: application/json
+
+{
+        "applicantId": "667d762a0a67fcd2fc809b97",
+        "jobId": "667d76b20a67fcd2fc809bc4"
+}
+
+### 
+http://localhost:9999/job/recruiter/6670513cc1cbee5da0024a1c
+
+
+### 
+GET http://localhost:9999/company/search?name=
+
+###
+POST http://localhost:9999/user/login
+Content-Type: application/json
+
+{
+        "identifier": "long123",
+        "password": "123"
+}
+
+
+###
+GET http://localhost:9999/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjU4M2FjZDg0ZWJkZmY4ZDIxMmJhMiIsImlhdCI6MTcxOTM3Mjk1NSwiZXhwIjoxNzE5MzcyOTcwfQ.ZvILr9I7GzlfK-1Qc-_IYtdwSTIJhZnNCmC0FGTxa5U
+
+###
+PUT http://localhost:9999/user/666583acd84ebdff8d212ba2
+Content-Type: application/json
+
+{
+        "fullName": "Doan Long 12345",
+        "phoneNumber": "030492ádasdasd34ádascasasca"
+}
+
+###
+GET http://localhost:9999/job/find?title=Software+Engineer&location=&experience=&minSalary=&maxSalary=
+
+
+###
+GET http://localhost:9999/job/recruiter/6667f45cc78bf282d571be88
+
+### Upload CV
+POST http://localhost:9999/cv/upload
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="cvFile"; filename="hai.pdf"
+Content-Type: image/png
+
+< ./path/to/448594813_1173067050494946_7190240286702007045_n.png
+--boundary
+Content-Disposition: form-data; name="applicantID"
+
+666583acd84ebdff8d212ba2
+--boundary--
+
+
+###
+GET http://localhost:9999/company/search?name=Tech%20Innovators%20Inc.
+
+###
+POST http://localhost:9999/user/regis-recruiter
+Content-Type: application/json
+
+{
+        "username": "Manh2003",
+        "password": "123",
+        "email": "sdvsdvascascascascz@gmail.com",
+        "fullName": "Doan Son Manh",
+        "phoneNumber": "03049234"
+}
+
+
+###
 POST http://localhost:9999/auth/login
 Content-Type: application/json
 {

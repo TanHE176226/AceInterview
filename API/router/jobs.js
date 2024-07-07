@@ -3,20 +3,36 @@ import { jobController } from '../controller/index.js';
 
 const jobRouter = express.Router();
 
-//get list companies 
-jobRouter.get("/", jobController.getAllJob);
+jobRouter.get('/', jobController.getAllJobs);
+
+// GET jobs by recruiters ID /job?recruiterID=12345
+jobRouter.get('/recruiter/:recruiterID', jobController.getJobsByRecruiterID);
+
+// Get all jobs with detail
 jobRouter.get('/find', jobController.getJobs);
 
-jobRouter.post('/apply/:jobId', async (req, res) => {
-    const userId = req.body.userId; // Assuming userId is provided in the request body
-    const jobId = req.params.jobId;
+// Get all pending jobs
+jobRouter.get('/pending', jobController.getPendingJobs);
 
-    try {
-        const result = await jobController.applyForJob(userId, jobId);
-        res.json(result);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
+// Create a new job
+jobRouter.post('/', jobController.createJob);
+
+// Update a job by ID
+jobRouter.put('/:jobId', jobController.updateJob);
+
+// Delete a job by ID
+jobRouter.delete('/:jobId', jobController.deleteJob);
+
+// Get job details
+jobRouter.get('/:id', jobController.getJobDetails);
+
+// Approve Jobs
+jobRouter.patch('/:jobId/approve', jobController.approveJob);
+
+// Reject Jobs
+jobRouter.patch('/:jobId/reject', jobController.rejectJob);
+
+
+jobRouter.get('/:recruiterID/jobs/details', jobController.getRecruiterJobsWithDetails);
 
 export default jobRouter;

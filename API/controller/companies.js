@@ -20,9 +20,6 @@ const getAllCompanies = async (req, res) => {
 const searchCompanyByName = async (req, res) => {
     try {
         const { name } = req.query;
-        if (!name) {
-            return res.status(400).json({ error: 'Name query parameter is required' });
-        }
         const companies = await companiesDAO.searchCompanyByName(name);
         res.status(200).json(companies);
     } catch (error) {
@@ -62,6 +59,7 @@ const createCompany = async (req, res) => {
             numberOfEmployees,
             companyStatus
         } = req.body;
+ 
 
         // Optionally log the received company data for debugging
         console.log('Received company data:', req.body);
@@ -74,9 +72,9 @@ const createCompany = async (req, res) => {
         let logoFile = req.files.logo;
         let businessLicenseFile = req.files.businessLicense;
 
-        const logoUploadPath = path.join(__dirname, '../uploads/', logoFile.name);
-        const businessLicenseUploadPath = path.join(__dirname, '../uploads/', businessLicenseFile.name);
-
+        const logoUploadPath = path.join(__dirname, '../uploads/logo', logoFile.name);
+        const businessLicenseUploadPath = path.join(__dirname, '../uploads/bussiness', businessLicenseFile.name);
+        
         // Save the logo file
         logoFile.mv(logoUploadPath, async (err) => {
             if (err) {
@@ -99,8 +97,8 @@ const createCompany = async (req, res) => {
                         taxNumber,
                         numberOfEmployees,
                         companyStatus,
-                        logo: logoUploadPath, // Include logo path
-                        businessLicense: businessLicenseUploadPath // Include BusinessLicense path
+                        logo: `${logoFile.name}`, // Include logo path
+                        businessLicense: `${businessLicenseFile.name}` // Include BusinessLicense path
                     };
 
                     // Call companyDAO.createCompany to save the company
@@ -120,6 +118,46 @@ const createCompany = async (req, res) => {
     }
 };
 
+const createCompanyWithNoFiles = async (req, res) => {
+    try {
+        // Destructure req.body to extract necessary fields
+        const {
+            companyName,
+            email,
+            phoneNumber,
+            location,
+            taxNumber,
+            numberOfEmployees,
+            companyStatus
+        } = req.body;
+
+        // Optionally log the received company data for debugging
+        console.log('Received company data:', req.body);
+
+        // Create a new object containing extracted fields
+        const companyData = {
+            companyName,
+            email,
+            phoneNumber,
+            location,
+            taxNumber,
+            numberOfEmployees,
+            companyStatus
+        };
+
+        // Call companyDAO.createCompany to save the company
+        const newCompany = await companiesDAO.createCompany(companyData);
+
+        // Respond with status 201 (Created) and the newly created company data
+        res.status(201).json(newCompany);
+    } catch (error) {
+        // If an error occurs, respond with status 500 (Internal Server Error)
+        // and send the error message as JSON
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 export default {
-    getAllCompanies, searchCompanyByName, getCompanyDetailById, createCompany
+    getAllCompanies, searchCompanyByName, getCompanyDetailById, createCompany, createCompanyWithNoFiles
 }

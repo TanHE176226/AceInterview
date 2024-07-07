@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAnalytics, isSupported  } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -9,22 +9,24 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyB_7sgpW3yRoUxrEWwKHfzshITCEw15yxg",
-  authDomain: "aceinrerviews.firebaseapp.com",
-  projectId: "aceinrerviews",
-  storageBucket: "aceinrerviews.appspot.com",
-  messagingSenderId: "967216269214",
-  appId: "1:967216269214:web:ff760c98fea14dd29b388f",
-  measurementId: "G-960K02Y6VV"
+  apiKey: "AIzaSyB9m2hNnQYXuYy7rkSWpa4dBMbBQODf55s",
+  authDomain: "front-end-ai-e2ee8.firebaseapp.com",
+  projectId: "front-end-ai-e2ee8",
+  storageBucket: "front-end-ai-e2ee8.appspot.com",
+  messagingSenderId: "274803394581",
+  appId: "1:274803394581:web:5e83bb3bf57a229f0ae61c",
+  measurementId: "G-7ZGHKTP9DY"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Storage
 const storage = getStorage(app);
 
-export { storage };
+// Check if Analytics is supported before initializing
+if (await isSupported()) {
+  const analytics = getAnalytics(app);
+}
 
-// import serviceAccount from '../'; // Đường dẫn đến tệp service account key JSON
+export { storage };
 

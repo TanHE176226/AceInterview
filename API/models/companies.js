@@ -4,7 +4,7 @@ import User from './users.js';
 const companySchema = new Schema({
     companyName: {
         type: String,
-        required: true
+        // required: true
     },
     email: {
         type: String,
@@ -17,29 +17,28 @@ const companySchema = new Schema({
     },
     location: {
         type: String,
-        required: true
+        // required: true
     },
     taxNumber: {
         type: String,
-        required: true
+        // required: true
     },
     numberOfEmployees: {
         type: Number,
-        required: true
+        // required: true
     },
     logo: {
         type: String,
-        require: true
+        // required: true
     },
     businessLicense: {
         type: String,
-        require: true
+        // required: true
     },
-
     // Company Status: Bronze, Silver, Gold, Diamond
     companyStatus: {
         type: Number,
-        required: true
+        // required: true
     }
 }, {
     timestamps: true,

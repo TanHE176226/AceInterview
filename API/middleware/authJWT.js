@@ -24,21 +24,19 @@ function isRecruiter(req, res, next) {
     }
 }
 
+// Middleware xác thực token
 function authenticationToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    // If there is no token provided
-    if (token == null) return res.sendStatus(401);
+    if (token == null) return res.sendStatus(401); // If no token is provided
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-        // If token is no longer valid
-        if (err) return res.sendStatus(403);
+        if (err) return res.sendStatus(403); // If token is no longer valid
 
         const userID = decodedToken.id;
         try {
             const user = await User.findById(userID);
             req.user = user;
-
             next();
         } catch (error) {
             console.error(error);
