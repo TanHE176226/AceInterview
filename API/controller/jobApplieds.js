@@ -70,8 +70,22 @@ const getJobsAppliedByRecruiter = async (req, res) => {
   }
 };
 
+const getJobApplication = async (req, res) => {
+  try {
+    const jobID = req.params.jobID;
+    const jobId = await jobAppliedDAO.getJobApplicationByJobID(jobID);
+    if (!jobId || jobId.length === 0) {
+      return res.status(404).json({ message: 'Job applications not found' });
+    }
+    res.status(200).json(jobId);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export default {
   getAppliedJobs,
   applyForJob,
-  getJobsAppliedByRecruiter
+  getJobsAppliedByRecruiter,
+  getJobApplication
 };

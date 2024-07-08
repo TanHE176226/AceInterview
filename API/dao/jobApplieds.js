@@ -38,7 +38,7 @@ const appliedForJob = async (jobId, applicantId, cvsId) => {
     }
 };
 
-const getJobsAppliedByRecruiter = async(recruiterId) => {
+const getJobsAppliedByRecruiter = async (recruiterId) => {
     try {
         const jobsApplied = await JobApplied.find()
             .populate({
@@ -55,7 +55,16 @@ const getJobsAppliedByRecruiter = async(recruiterId) => {
     }
 }
 
+const getJobApplicationByJobID = async (jobID) => {
+    try {
+        const jobId = await JobApplied.find({ jobID }).populate('jobID').populate('applicantID').populate('cvsID');
+        console.log("return: ", jobId);
+        return jobId;
+    } catch (error) {
+        throw new Error(`Unable to get job application: ${error}`);
+    }
+}
 
 export default {
-    getAppliedJobsByApplicantId, appliedForJob, getJobsAppliedByRecruiter
+    getJobApplicationByJobID, getAppliedJobsByApplicantId, appliedForJob, getJobsAppliedByRecruiter
 };
