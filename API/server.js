@@ -5,11 +5,10 @@ import cors from 'cors';
 import path from 'path';
 import fileUpload from 'express-fileupload';
 import { fileURLToPath } from 'url';
-
-
 import { User, Company, CV, Industry, JobApplied, Job } from './models/index.js'
 import { companiesRouter, jobRouter, userRouter, cvRouter, industryRouter, jobAppliedRouter } from './router/index.js';
 import cookieParser from 'cookie-parser';
+import { setupSwagger } from './swaggerSetup.js';
 
 dotenv.config();
 // Định nghĩa 1 webserver
@@ -35,6 +34,14 @@ app.use(fileUpload({
     createParentPath: true
 }));
 // app.use('/uploads', express.static('uploads'));
+
+// Set up swagger
+setupSwagger(app, '/company', './router/companies.js', 'Company API', 'API documentation for the Company route');
+setupSwagger(app, '/job', './router/jobs.js', 'Job API', 'API documentation for the Job route');
+setupSwagger(app, '/cv', './router/CVs.js', 'CV API', 'API documentation for the CV route');
+setupSwagger(app, '/user', './router/users.js', 'User API', 'API documentation for the User route');
+setupSwagger(app, '/industry', './router/industries.js', 'Industry API', 'API documentation for the Industry route');
+setupSwagger(app, '/appliedjobs', './router/jobApplieds.js', 'JobApplied API', 'API documentation for the JobApplied route');
 
 
 //define uri couter
